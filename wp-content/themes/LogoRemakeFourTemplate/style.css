@@ -1,0 +1,22 @@
+/* Color definitions for Red and Blue */
+
+:root {
+  --color-red: #FF0000;
+  --color-blue: #0000FF;
+}
+
+.red {
+  color: #FF0000;
+}
+
+.blue {
+  color: #0000FF;
+}
+
+.bg-red {
+  background-color: #FF0000;
+}
+
+.bg-blue {
+  background-color: #0000FF;
+}
