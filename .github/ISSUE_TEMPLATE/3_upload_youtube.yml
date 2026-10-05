@@ -1,0 +1,62 @@
+name: '🎦 Upload to YouTube'
+description: Request to upload a video to YouTube
+title: 'Upload to YouTube: '
+labels: ['youtube']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please complete the form with the information needed to upload your video to YouTube.
+
+  - type: input
+    id: select_file
+    attributes:
+      label: Select video file
+      description: Attach the MP4 video file to this issue, or provide a link to the file.
+      placeholder: 'Attach an MP4 file or paste its link here'
+    validations:
+      required: true
+
+  - type: input
+    id: video_name
+    attributes:
+      label: Video name
+      description: Enter the title for the YouTube video.
+      placeholder: 'Never Gonna Give You Up - Rick Astley'
+    validations:
+      required: true
+
+  - type: textarea
+    id: video_description
+    attributes:
+      label: Video description
+      description: Enter the description for the YouTube video.
+      placeholder: 'Rick Astley music video'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: made_for_kids
+    attributes:
+      label: Is this video made for kids?
+      description: Select Yes or No according to YouTube's made-for-kids requirements.
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: upload_to_youtube
+    attributes:
+      label: Upload to YouTube
+      description: Confirm that this video should be uploaded to YouTube.
+      options:
+        - label: I confirm that this video should be uploaded to YouTube.
+          required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Add any other information that will help process the upload request.
