@@ -1,0 +1,3 @@
+files:
+  - source: https://logoremakefour1530.github.io/AsTeRICS-Grid/app/lang/i18n.en.json
+    translation: https://logoremakefour1530.github.io/AsTeRICS-Grid/app/lang/i18n.%osx_locale%.json
