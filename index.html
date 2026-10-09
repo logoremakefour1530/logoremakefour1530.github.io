@@ -20,9 +20,6 @@
 	<link rel="robots" href=https://logoremakefour1530.github.io/robots.txt">
     <link rel="stylesheet" href="https://logoremakefour1530.github.io/style.css">
     <link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/fontawesome/css/all.css">
-	<link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/custom.css">
-	<link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/jquery-ui.min.css">
-	<link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/skeleton.css">
 	<link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/bootstrap-grid.css">
     <link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/grid-styles.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W3Z15Z4TYR"></script>
@@ -60,7 +57,67 @@
                         <li><a tabindex="4" href="#dictionaries" :aria-label="$t('manageDictionaries')"><button tabindex="-1"><i class="fas fa-2x fa-book"></i><span class="hide-mobile">{{ $t('manageDictionaries') }}</span></button></a></li>
                     </ul>
                 </div>
+                <!-- main script -->
+<script type="application/javascript">
+    //get and check data
+    getData('https://logoremakefour1530.github.io/AsTeRICS-Grid-Data/communicators/ARASAAC Global Grid Core Communicator/es/ARASAAC_Global_Grid_Core_Communicator_ES.grd.json);
 
+    function gotDataCallback(data) {
+        data = parseJson(data);
+        data = data.grids;
+        removeElement('loading');
+
+        //create headings and buttons
+        for (var i = 0; i < data.length; i++) { //grids
+            var grid = data[i];
+            var gridLabel = grid.label;
+            var elements = grid.gridElements;
+            var first = true;
+            for (var j = 0; j < elements.length; j++) { //elements
+                var element = elements[j];
+                var actions = element.actions;
+                if(actions && actions.length > 0) {
+                    for (var k = 0; k < actions.length; k++) { //elements
+                        var action = actions[k];
+                        if(action.modelName == "GridActionARE") {
+                            if(first) {
+                                first = false;
+                                var titleElem = createTitle(gridLabel, 'row col-xs-12');
+                                appendElement(titleElem);
+                            }
+                            var button = createButton(element.label, "", "sendDataToInputPort('" + action.componentId + "', '" + action.dataPortId + "', '" + action.dataPortSendData + "')");
+                            appendElement(button);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function appendElement(element) {
+        document.getElementById("controls").appendChild(element);
+    }
+
+    function log(string) {
+        if(!MODE_COMPATIBILITY) {
+            console.log(string);
+        }
+    }
+
+    if(!MODE_COMPATIBILITY) {
+        i18n.translatePage();
+        window.onkeydown = function(e) {
+            var key = e.keyCode ? e.keyCode : e.which;
+            if(e.ctrlKey && e.altKey && key >= 49 && key <= 57) { //Ctrl + Alt + [1-9]
+                var num = key - 48;
+                var button = document.getElementsByClassName('action-button')[num-1];
+                if(button) {
+                    button.click();
+                }
+            }
+        }
+    }
+</script>		
                 <h2 class="hide-mobile">{{ $t('users') }}</h2>
                 <ul>
                     <li><a tabindex="5" href="#login" :aria-label="$t('changeUser')">
