@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowdin - LogoRemakeFour</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-box input {
+            width: 300px;
+            padding: 12px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .language-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .language-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-card.hidden {
+            display: none;
+        }
+
+        .language-flag {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .language-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .language-code {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        .language-countries {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Crowdin Languages & Countries</h1>
+            <p>Explore all supported languages and their regions for AsTeRICS-Grid</p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search languages, countries, or codes...">
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <h3 id="totalLanguages">0</h3>
+                <p>Total Languages</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="totalCountries">0</h3>
+                <p>Total Countries</p>
+            </div>
+        </div>
+
+        <div class="languages-grid" id="languagesGrid">
+            <!-- Language cards will be populated here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive list of Crowdin languages and their countries
+        const languages = [
+            { name: 'English', code: 'en', flag: '🇬🇧', countries: 'United States, United Kingdom, Canada, Australia' },
+            { name: 'Spanish', code: 'es', flag: '🇪🇸', countries: 'Spain, Mexico, Argentina, Colombia' },
+            { name: 'French', code: 'fr', flag: '🇫🇷', countries: 'France, Canada, Belgium, Switzerland' },
+            { name: 'German', code: 'de', flag: '🇩🇪', countries: 'Germany, Austria, Switzerland' },
+            { name: 'Italian', code: 'it', flag: '🇮🇹', countries: 'Italy, Switzerland' },
+            { name: 'Portuguese', code: 'pt', flag: '🇵🇹', countries: 'Portugal, Brazil' },
+            { name: 'Dutch', code: 'nl', flag: '🇳🇱', countries: 'Netherlands, Belgium' },
+            { name: 'Polish', code: 'pl', flag: '🇵🇱', countries: 'Poland' },
+            { name: 'Russian', code: 'ru', flag: '🇷🇺', countries: 'Russia, Belarus' },
+            { name: 'Chinese (Simplified)', code: 'zh-CN', flag: '🇨🇳', countries: 'China' },
+            { name: 'Chinese (Traditional)', code: 'zh-TW', flag: '🇹🇼', countries: 'Taiwan, Hong Kong' },
+            { name: 'Japanese', code: 'ja', flag: '🇯🇵', countries: 'Japan' },
+            { name: 'Korean', code: 'ko', flag: '🇰🇷', countries: 'South Korea' },
+            { name: 'Arabic', code: 'ar', flag: '🇸🇦', countries: 'Saudi Arabia, Egypt, UAE' },
+            { name: 'Hindi', code: 'hi', flag: '🇮🇳', countries: 'India' },
+            { name: 'Turkish', code: 'tr', flag: '🇹🇷', countries: 'Turkey' },
+            { name: 'Thai', code: 'th', flag: '🇹🇭', countries: 'Thailand' },
+            { name: 'Vietnamese', code: 'vi', flag: '🇻🇳', countries: 'Vietnam' },
+            { name: 'Swedish', code: 'sv', flag: '🇸🇪', countries: 'Sweden' },
+            { name: 'Danish', code: 'da', flag: '🇩🇰', countries: 'Denmark' },
+            { name: 'Norwegian', code: 'no', flag: '🇳🇴', countries: 'Norway' },
+            { name: 'Finnish', code: 'fi', flag: '🇫🇮', countries: 'Finland' },
+            { name: 'Greek', code: 'el', flag: '🇬🇷', countries: 'Greece' },
+            { name: 'Czech', code: 'cs', flag: '🇨🇿', countries: 'Czech Republic' },
+            { name: 'Hungarian', code: 'hu', flag: '🇭🇺', countries: 'Hungary' },
+            { name: 'Romanian', code: 'ro', flag: '🇷🇴', countries: 'Romania' },
+            { name: 'Ukrainian', code: 'uk', flag: '🇺🇦', countries: 'Ukraine' },
+            { name: 'Bulgarian', code: 'bg', flag: '🇧🇬', countries: 'Bulgaria' },
+        ];
+
+        const grid = document.getElementById('languagesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const totalLanguagesEl = document.getElementById('totalLanguages');
+        const totalCountriesEl = document.getElementById('totalCountries');
+
+        // Initial render
+        function renderLanguages(languagesToRender = languages) {
+            grid.innerHTML = '';
+            languagesToRender.forEach(lang => {
+                const card = document.createElement('div');
+                card.className = 'language-card';
+                card.innerHTML = `
+                    <div class="language-flag">${lang.flag}</div>
+                    <div class="language-name">${lang.name}</div>
+                    <div class="language-code">Code: ${lang.code}</div>
+                    <div class="language-countries"><strong>Countries:</strong> ${lang.countries}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Update stats
+            totalLanguagesEl.textContent = languagesToRender.length;
+            const uniqueCountries = new Set();
+            languagesToRender.forEach(lang => {
+                lang.countries.split(',').forEach(country => {
+                    uniqueCountries.add(country.trim());
+                });
+            });
+            totalCountriesEl.textContent = uniqueCountries.size;
+        }
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = languages.filter(lang => 
+                lang.name.toLowerCase().includes(searchTerm) ||
+                lang.code.toLowerCase().includes(searchTerm) ||
+                lang.countries.toLowerCase().includes(searchTerm)
+            );
+            renderLanguages(filtered);
+        });
+
+        // Initial render
+        renderLanguages();
+    </script>
+</body>
+</html>
