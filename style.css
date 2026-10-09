@@ -1,4 +1,8 @@
-/* Red Color Definition */
+/* SegoeUI-Bold.ttf */
+@font-face {
+	font-family: "SegoeUI-Bold";
+	src: url("https://logoremakefour1530.github.io/Segoe-Fonts/Original%20Version/SegoeUI-Bold.ttf");
+}
 
 /* Using named color */
 .red-named {
