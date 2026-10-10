@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5439326873004541"	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<head>
+    <title>LogoRemakeFour</title>
+    <meta id="viewPortMeta" name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="UWnxfeRniUm-l7GAbNdqfZQmCCaAU3HB6jGOuEHZ26k" />
+	<meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="false"><meta name="application-name" content="LogoRemakeFour">
+	<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="LogoRemakeFour">
+    <meta name="google-adsense-account" content="ca-pub-5439326873004541">
+	<!-- Icons -->
+    <link rel="apple-touch-icon" href="https://logoremakefor1530.github.io/apple-touch-icon.png">
+	<link rel="icon" href="https://logoremakefour1530.github.io/favicon.ico" type="image/png">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Tilt%20Warp" rel="stylesheet">
+
+	<link rel="robots" href=https://logoremakefour1530.github.io/robots.txt">
+    <link rel="stylesheet" href="https://logoremakefour1530.github.io/style.css">
+    <link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/fontawesome/css/all.css">
+	<link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/grid-styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W3Z15Z4TYR"></script>
+<script src="https://lrfeditor1807.github.io/DPlayer.min.js"></script>    
+</script>
+<div id="app" class="holy-grail">
+<h1 class="sr-only">Asterics AAC</h1>
+    <div id="touchElement" class="grid-container" style="z-index: 2; display: none; -webkit-touch-callout: none; -webkit-user-select: none;">
+    </div>
+    <audio style="display: none" id="audioPlayer" src="" preload="none"></audio>
+    <video style="display: none" id="videoPlayer" src="" preload="none"></video>
+    <notification-bar ref="notificationBar"></notification-bar>
+    <progress-bar-modal v-show="showModal === modalTypes.MODAL_PROGRESSBAR" ref="progressBar" @close="showModal = null"></progress-bar-modal>
+    <search-modal v-if="showModal === modalTypes.MODAL_SEARCH" @close="showModal = null;" :route-to-edit="Router.getCurrentView() === Router.VIEWS.GridEditView" :options="modalOptions"></search-modal>
+    <message-box v-show="showModal === modalTypes.MODAL_MESSAGEBOX" ref="messageBox" @close="showModal = null"></message-box>
+    <div class="holy-grail-body" v-cloak>
+        <div class="holy-grail-sidebar-1 hg-sidebar no-print" v-show="showSidebar">
+            <div style="flex: 0 0 auto;">
+                <div class="show-mobile">
+                    <a tabindex="1" href="javascript:void(0)" :aria-label="$t('closeSidebar')" @click="closeSidebar()"><button tabindex="-1"><i class="fas fa-2x fa-bars inline"></i></button></a>
+                </div>
+                <div class="hide-mobile" style="display: inline-flex">
+                    <a tabindex="1" href="javascript:void(0)" :aria-label="$t('closeSidebar')" @click="closeSidebar()" style="margin: 0.2em 0.5em 0 1.2em"><i class="fas fa-2x fa-bars inline"></i></a>
+                    <a tabindex="-1" aria-hidden="true" href="javascript:void(0)" @click="toMain"><h1 class="inline hide-mobile"><img id="astericsIcon" src="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/img/asterics-aac-logo-raw.svg" height="40" alt="Asterics AAC"/></h1></a>
+                </div>
+            </div>
+
+            <nav role="navigation" class="srow content" style="flex: 1 1 auto" accesskey="1">
+                <div v-if="currentUser">
+                    <h2 class="hide-mobile" style="margin-top: 1.5em;">{{ $t('navigation') }}</h2>
+                    <br class="show-mobile" aria-hidden="true"/>
+                    <ul>
+                        <li><a tabindex="2" href="javascript:void(0)" @click="toMain" :aria-label="$t('mainView')"><button tabindex="-1"><i class="fas fa-2x fa-home"></i><span class="hide-mobile">{{ $t('mainView') }}</span></button></a></li>
+                        <li><a tabindex="3" href="#grids" :aria-label="$t('manageGrids')"><button tabindex="-1"><i class="fas fa-2x fa-list-ul"></i><span class="hide-mobile">{{ $t('manageGrids') }}</span></button></a></li>
+                        <li><a tabindex="4" href="#dictionaries" :aria-label="$t('manageDictionaries')"><button tabindex="-1"><i class="fas fa-2x fa-book"></i><span class="hide-mobile">{{ $t('manageDictionaries') }}</span></button></a></li>
+                    </ul>
+                </div>
+                <!-- main script -->
+<script type="application/javascript">
+    //get and check data
+    getData('https://logoremakefour1530.github.io/AsTeRICS-Grid-Data/communicators/ARASAAC Global Grid Core Communicator/es/ARASAAC_Global_Grid_Core_Communicator_ES.grd.json);
+
+    function gotDataCallback(data) {
+        data = parseJson(data);
+        data = data.grids;
+        removeElement('loading');
+
+        //create headings and buttons
+        for (var i = 0; i < data.length; i++) { //grids
+            var grid = data[i];
+            var gridLabel = grid.label;
+            var elements = grid.gridElements;
+            var first = true;
+            for (var j = 0; j < elements.length; j++) { //elements
+                var element = elements[j];
+                var actions = element.actions;
+                if(actions && actions.length > 0) {
+                    for (var k = 0; k < actions.length; k++) { //elements
+                        var action = actions[k];
+                        if(action.modelName == "GridActionARE") {
+                            if(first) {
+                                first = false;
+                                var titleElem = createTitle(gridLabel, 'row col-xs-12');
+                                appendElement(titleElem);
+                            }
+                            var button = createButton(element.label, "", "sendDataToInputPort('" + action.componentId + "', '" + action.dataPortId + "', '" + action.dataPortSendData + "')");
+                            appendElement(button);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function appendElement(element) {
+        document.getElementById("controls").appendChild(element);
+    }
+
+    function log(string) {
+        if(!MODE_COMPATIBILITY) {
+            console.log(string);
+        }
+    }
+
+    if(!MODE_COMPATIBILITY) {
+        i18n.translatePage();
+        window.onkeydown = function(e) {
+            var key = e.keyCode ? e.keyCode : e.which;
+            if(e.ctrlKey && e.altKey && key >= 49 && key <= 57) { //Ctrl + Alt + [1-9]
+                var num = key - 48;
+                var button = document.getElementsByClassName('action-button')[num-1];
+                if(button) {
+                    button.click();
+                }
+            }
+        }
+    }
+</script>		
+                <h2 class="hide-mobile">{{ $t('users') }}</h2>
+                <ul>
+                    <li><a tabindex="5" href="#login" :aria-label="$t('changeUser')">
+                        <button tabindex="-1">
+                            <i class="fas fa-2x fa-users"></i><span v-show="!currentUser" class="hide-mobile">{{ $t('login') }}</span><span v-show="currentUser" class="hide-mobile">{{ $t('changeUser') }}</span>
+                        </button></a>
+                    </li>
+                    <li class="hide-mobile"><a tabindex="6" href="#register" :aria-label="$t('addOnlineUser')"><button tabindex="-1"><i class="fas fa-2x fa-user-plus"></i><span class="hide-mobile">{{ $t('addOnlineUser') }}</span></button></a></li>
+                    <li class="hide-mobile"><a tabindex="7" href="#add" :aria-label="$t('addOfflineUser')"><button tabindex="-1"><i class="fas fa-2x fa-user-plus"></i><span>{{ $t('addOfflineUser') }}</span></button></a></li>
+                </ul>
+
+                <br class="hide-mobile" aria-hidden="true"/>
+                <ul style="margin-bottom: 0;">
+                    <li v-show="currentUser"><a tabindex="8" href="#settings" :aria-label="$t('settings')"><button tabindex="-1"><i class="fas fa-2x fa-cog"></i><span class="hide-mobile">{{ $t('settings') }}</span></button></a></li>
+                    <li class="hide-mobile"><a tabindex="9" href="#about" :aria-label="$t('aboutAstericsGrid')"><button tabindex="-1"><i class="fas fa-2x fa-info-circle"></i><span class="hide-mobile">{{ $t('aboutAstericsGrid') }}</span></button></a></li>
+                    <li><a tabindex="10" href="#help" :aria-label="$t('help')"><button tabindex="-1" id="helpButton"><i class="fas fa-2x fa-question-circle"></i><span class="hide-mobile">{{ $t('help') }}</span></button></a></li>
+                    <li class="show-mobile"><a tabindex="11" href="javascript:;" :aria-label="$t('more')" @click="moreNavigation()" id="moreNavigation"><button tabindex="-1"><i class="fas fa-2x fa-ellipsis-v"></i></button></a></li>
+                </ul>
+            </nav>
+            <div style="flex: 0 0 auto;" id="syncVisualizationWrapper">
+                <span v-show="currentUser && !isLocalUser" class="hide-mobile"><span>{{ $t('loggedInAs') }}</span> <i>{{currentUser}}</i></span>
+                <span v-show="currentUser && isLocalUser" class="hide-mobile"><span>{{ $t('usingOfflineUser') }}</span> <i>{{currentUser}}</i></span>
+                <span v-show="!currentUser" class="hide-mobile">{{ $t('notLoggedIn') }}</span>
+                <span id="syncVisualization" v-if="currentUser && !isLocalUser" class="fa-stack fa-1x right" :title="syncState | translate">
+                    <i class="fas fa-cloud fa-stack-2x" style="color: lightblue"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_SYNCINC" class="fas fa-sync-alt fa-stack-1x fa-spin"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_SYNCED" class="fas fa-check fa-stack-1x"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_STOPPED" class="fas fa-pause fa-stack-1x"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_ONLINEONLY" class="fas fa-globe fa-stack-1x"></i>
+                    <i v-show="!syncState || syncState === constants.DB_SYNC_STATE_FAIL" class="fas fa-times fa-stack-1x"></i>
+                </span>
+                <span id="syncVisualization2" v-if="currentUser && isLocalUser && syncState === constants.DB_SYNC_STATE_SYNCINC" class="fa-stack fa-1x right" :title="$t('cachingImages')">
+                    <i class="fas fa-sync-alt fa-stack-1x fa-spin"></i>
+                </span>
+            </div>
+        </div>
+        <main role="main" class="holy-grail-content" accesskey="2">
+            <!-- Main page content -->
+            <div class="srow content text-content" v-if="!component">
+                <div class="grid-container grid-mask">
+                    <i class="fas fa-4x fa-spinner fa-spin"></i>
+                </div>
+            </div>
+            <component v-if="component" v-bind:is="component" v-bind="properties" :key="componentKey"></component>
+        </main>
+    </div>
+  </div><template>
+    <div class="box">
+        <header class="srow header" role="toolbar" v-show="!propTransferObject">
+            <header-icon class="left"></header-icon>
+            <button tabindex="30" @click="back" :aria-label="$t('editingOff')" class="spaced small left">
+                <i class="fas fa-eye"></i>
+                <span class="hide-mobile">{{ $t('editingOff') }}</span>
+            </button>
+            <button tabindex="33" id="moreButton" :aria-label="$t('more')" class="spaced"><i class="fas fa-ellipsis-v"></i> <span class="hide-mobile">{{ $t('more') }}</span></button>
+            <div id="moreButtonMenu"></div>
+            <div class="spaced btn-group">
+                <button tabindex="31" @click="undo" :aria-label="$t('undo')" :disabled="doingUndoRedo|| !undoService.canUndo()" class="small"><i class="fas fa-undo"></i> <span class="hide-mobile">{{ $t('undo') }}</span></button>
+                <button tabindex="32" @click="redo"  :aria-label="$t('redo')" :disabled="doingUndoRedo || !undoService.canRedo()" class="small spaced"><i class="fas fa-redo"></i> <span class="hide-mobile">{{ $t('redo') }}</span></button>
+            </div>
+        </header>
+        <header class="d-flex align-items-center transfer-props-header" role="toolbar" v-if="propTransferObject">
+            <div class="me-5">
+                <strong class="me-2">
+                    <i class="fas fa-angle-double-right"></i>&nbsp;<span class="d-none d-sm-inline-block"><span>{{ $t('transferProperties') }}</span>:</span>
+                </strong>
+                <span><span>{{ $t('selectTargetElements') }}</span>...</span>
+            </div>
+            <button class="mb-0 me-2" @click="stopPropTransfer" :title="$t('cancel')"><i class="fas fa-times"/> <span class="d-none d-lg-inline-block">{{ $t('cancel') }}</span></button>
+            <button class="mb-0" @click="applyPropTransfer" :title="$t('ok')"><i class="fas fa-check"/> <span class="d-none d-lg-inline-block">{{ $t('ok') }}</span></button>
+        </header>
+        <div>
+            <edit-element v-if="showEditModal" v-bind:edit-element-id-param="editElementId" :undo-service="undoService" :grid-data-id="gridData.id" :new-position="newPosition" @reload="reload" @close="showEditModal = false" @mark="markElement" @actions="(id) => {editElementId = id; showActionsModal = true}"/>
+        </div>
+        <div>
+            <add-multiple-modal v-if="showMultipleModal" v-bind:grid-data="gridData" :undo-service="undoService" @reload="reload" @close="showMultipleModal = false"/>
+        </div>
+        <div>
+            <grid-settings-modal v-if="showGridSettingsModal" :grid-data-param="gridData" :is-global-grid="isEditingGlobalGrid" @reload="reload" @close="showGridSettingsModal = false;" :undo-service="undoService"/>
+        </div>
+        <div>
+            <grid-translate-modal v-if="showTranslateModal" :grid-data-id="gridData.id" @close="showTranslateModal = false" @reload="reload"/>
+        </div>
+        <div>
+            <set-navigation-modal v-if="showNavigateModal" :grid-id="gridData.id" :grid-element-id="editElementId" @close="showNavigateModal = false" @reload="reload"></set-navigation-modal>
+        </div>
+        <div>
+            <transfer-props-modal v-if="showPropTransferModal" :grid-id="gridData.id" :grid-element-id="editElementId" @start="(propTransferObject) => startPropTransfer(propTransferObject)" @close="showPropTransferModal = false"></transfer-props-modal>
+        </div>
+        <div class="srow content" id="contentContainer" v-if="!(metadata && gridData)">
+            <div v-if="!showGrid" class="grid-container grid-mask">
+                <i class="fas fa-4x fa-spinner fa-spin"/>
+            </div>
+        </div>
+        <div class="srow content d-flex" v-if="metadata && gridData" style="min-height: 0">
+            <app-grid-display id="grid-container" @changed="handleChange" :grid-data="gridData" :metadata="metadata" :editable="true" @interacted="onInteracted" @interactstart="onInteractStart" @interactend="onInteractEnd"/>
+        </div>
+    </div>
+<template>
+    <div class="modal" @dragenter="preventDefault" @dragover="preventDefault" @drop="preventDefault">
+        <div class="modal-mask">
+            <div class="modal-wrapper">
+                <div class="modal-container modal-container-flex" @keydown.esc="$emit('close')" @keydown.ctrl.enter="save()" @keydown.ctrl.right="nextFromKeyboard()" @keydown.ctrl.left="editNext(true)" @keydown.ctrl.y="save(true)">
+                    <div class="modal-header">
+                        <edit-element-header :grid-element="originalGridElement" :header="editElementId ? $t('editGridItem') : $t('newGridItem')" :close-fn="close" :open-help-fn="openHelp"></edit-element-header>
+                    </div>
+
+                    <nav-tabs class="mb-5" :tab-labels="Object.keys(possibleTabs)" v-model="currentTab" @input="imageSearch = ''"></nav-tabs>
+
+                    <div class="modal-body mt-2" v-if="gridElement">
+                        <div v-if="currentTab === TABS.TAB_GENERAL">
+                            <edit-element-general v-if="gridElement.type === GridElement.ELEMENT_TYPE_NORMAL || gridElement.type === GridElement.ELEMENT_TYPE_LIVE" :grid-element="gridElement" :grid-data="gridData" @searchImage="toImageSearch"></edit-element-general>
+                            <edit-element-youtube v-if="gridElement.type === GridElement.ELEMENT_TYPE_YT_PLAYER" :grid-element="gridElement"></edit-element-youtube>
+                            <edit-element-collect v-if="gridElement.type === GridElement.ELEMENT_TYPE_COLLECT" :grid-element="gridElement"></edit-element-collect>
+                            <edit-element-matrix v-if="gridElement.type === GridElement.ELEMENT_TYPE_MATRIX_CONVERSATION" :grid-element="gridElement"></edit-element-matrix>
+                        </div>
+                        <edit-element-live v-if="currentTab === TABS.TAB_LIVE_DATA" :grid-element="gridElement"></edit-element-live>
+                        <edit-element-image v-if="currentTab === TABS.TAB_IMAGE" :grid-element="gridElement" :grid-data="gridData" :image-search="imageSearch"></edit-element-image>
+                        <edit-element-word-forms v-if="currentTab === TABS.TAB_WORDFORMS" :grid-element="gridElement" :grid-data="gridData" @reloadData="initInternal(true)"></edit-element-word-forms>
+                        <edit-element-actions v-if="currentTab === TABS.TAB_ACTIONS" :grid-element="gridElement" :grid-data="gridData"></edit-element-actions>
+                    </div>
+
+                    <div class="modal-footer modal-footer-flex">
+                        <div class="button-container" v-if="gridElement">
+                            <div class="srow">
+                                <button @click="$emit('close')" :title="$t('keyboardEsc')" class="four columns offset-by-four">
+                                    <i class="fas fa-times"/> <span>{{ $t('cancel') }}</span>
+                                </button>
+                                <button @click="save()" :title="$t('keyboardCtrlEnter')" class="four columns">
+                                    <i class="fas fa-check"/> <span>{{ $t('ok') }}</span>
+                                </button>
+                            </div>
+                            <div class="hide-mobile srow">
+                                <div v-if="editElementId">
+                                    <button @click="editNext(true)" :title="$t('keyboardCtrlLeft')" class="four columns offset-by-four"><i class="fas fa-angle-double-left"/> <span>{{ $t('okEditPrevious') }}</span></button>
+                                    <button @click="editNext()" :title="$t('keyboardCtrlRight')" class="four columns"><span>{{ $t('okEditNext') }}</span> <i class="fas fa-angle-double-right"/></button>
+                                </div>
+                                <div v-if="!editElementId">
+                                    <button @click="addNext()" :title="$t('keyboardCtrlRight')" class="four columns offset-by-eight"><i class="fas fa-plus"/> <span>{{ $t('okAddAnother') }}</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {dataService} from '../../js/service/data/dataService'
+    import {GridImage} from "../../js/model/GridImage";
+    import './../../css/modal.css';
+    import {GridElement} from "../../js/model/GridElement";
+    import {GridData} from "../../js/model/GridData";
+    import {helpService} from "../../js/service/helpService";
+    import {util} from "../../js/util/util";
+    import NavTabs from "../components/nav-tabs.vue";
+    import EditElementGeneral from "./editElementGeneral.vue";
+    import EditElementImage from "./editElementImage.vue";
+    import EditElementActions from "./editElementActions.vue";
+    import EditElementYoutube from "./editElementYoutube.vue";
+    import {i18nService} from "../../js/service/i18nService.js";
+    import EditElementCollect from "./editElementCollect.vue";
+    import EditElementHeader from "../components/editElementHeader.vue";
+    import EditElementWordForms from "./editElementWordForms.vue";
+    import EditElementLive from './editElementLive.vue';
+    import EditElementMatrix from './editElementMatrix.vue';
+    import { gridLayoutUtil } from '../grid-layout/utils/gridLayoutUtil';
+
+    const TAB_GENERAL = 'TAB_GENERAL';
+    const TAB_IMAGE = 'TAB_IMAGE';
+    const TAB_WORDFORMS = 'TAB_WORDFORMS';
+    const TAB_ACTIONS = 'TAB_ACTIONS';
+    const TAB_LIVE_DATA = 'TAB_LIVE_DATA';
+    const TABS = {TAB_GENERAL, TAB_IMAGE, TAB_WORDFORMS, TAB_ACTIONS, TAB_LIVE_DATA};
+
+    export default {
+        props: ['editElementIdParam', 'gridDataId', 'undoService', 'newPosition'],
+        components: {
+            EditElementMatrix,
+            EditElementLive,
+            EditElementWordForms,
+            EditElementHeader,
+            EditElementCollect,
+            NavTabs, EditElementGeneral, EditElementImage, EditElementActions, EditElementYoutube
+        },
+        data: function () {
+            return {
+                gridData: null,
+                originalGridData: null,
+                gridElement: null,
+                originalGridElement: null,
+                editElementId: null,
+                TABS: TABS,
+                possibleTabs: {},
+                currentTab: TAB_GENERAL,
+                imageSearch: null,
+                GridElement: GridElement
+            }
+        },
+        methods: {
+            toImageSearch() {
+                this.imageSearch = i18nService.getTranslation(this.gridElement.label);
+                this.currentTab = TABS.TAB_IMAGE;
+            },
+            save(toActions) {
+                this.saveInternal().then((savedSomething) => {
+                    this.$emit('close');
+                    if (savedSomething) {
+                        this.$emit('reload', this.gridData);
+                    }
+                    if (savedSomething && !this.editElementId) {
+                        this.$emit('mark', this.gridElement.id);
+                    }
+                    if (toActions) {
+                        this.$emit('actions', this.gridElement.id);
+                    }
+                });
+            },
+            addNext() {
+                var thiz = this;
+                thiz.saveInternal().then(() => {
+                    this.$emit('reload', this.gridData);
+                    thiz.initInternal();
+                    $('#inputLabel').focus();
+                });
+            },
+            editNext(invertDirection) {
+                var thiz = this;
+                if (!thiz.editElementId) return;
+
+                thiz.saveInternal().then((savedSomething) => {
+                    if (savedSomething) {
+                        this.$emit('reload', this.gridData);
+                    }
+                    thiz.editElementId = new GridData(thiz.gridData).getNextElementId(thiz.editElementId, invertDirection, thiz.gridElement.type);
+                    thiz.initInternal();
+                    $('#inputLabel').focus();
+                });
+            },
+            nextFromKeyboard() {
+                if (this.editElementId) {
+                    this.editNext();
+                } else {
+                    this.addNext();
+                }
+            },
+            saveInternal() {
+                let thiz = this;
+                return new Promise(resolve => {
+                    if (thiz.gridData && JSON.stringify(thiz.originalGridData) !== JSON.stringify(thiz.gridData)) {
+                        thiz.undoService.updateGrid(thiz.gridData).then(updated => {
+                            resolve(updated);
+                        });
+                    } else {
+                        resolve(false);
+                    }
+                });
+            },
+            initInternal(dontReset) {
+                let thiz = this;
+                if (!dontReset) thiz.resetInternal();
+                dataService.getGrid(thiz.gridDataId).then(gridData => {
+                    thiz.gridData = JSON.parse(JSON.stringify(gridData));
+                    thiz.originalGridData = JSON.parse(JSON.stringify(gridData));
+                    if (thiz.editElementId) {
+                        thiz.gridElement = thiz.gridData.gridElements.filter(e => e.id === thiz.editElementId)[0];
+                        if (!thiz.gridElement.image) {
+                            thiz.gridElement.image = JSON.parse(JSON.stringify(new GridImage()));
+                        }
+                        thiz.gridElement.label = util.isString(thiz.gridElement.label) ? {} : thiz.gridElement.label;
+                    } else {
+                        let newXYPos = this.newPosition && this.newPosition.x !== undefined ? this.newPosition : gridData.getNewXYPos();
+                        newXYPos = gridLayoutUtil.getNextFreePosition(this.gridData, newXYPos);
+                        log.debug('creating element: x ' + newXYPos.x + ' / y ' + newXYPos.y);
+                        thiz.gridElement = JSON.parse(JSON.stringify(new GridElement({
+                            x: newXYPos.x,
+                            y: newXYPos.y
+                        })));
+                        thiz.gridData.gridElements.push(thiz.gridElement);
+                    }
+                    if (thiz.gridElement.type === GridElement.ELEMENT_TYPE_NORMAL) {
+                        this.possibleTabs = { TAB_GENERAL, TAB_IMAGE, TAB_WORDFORMS, TAB_ACTIONS };
+                    } else if (thiz.gridElement.type === GridElement.ELEMENT_TYPE_YT_PLAYER) {
+                        this.possibleTabs = { TAB_GENERAL, TAB_ACTIONS };
+                    } else if (thiz.gridElement.type === GridElement.ELEMENT_TYPE_COLLECT) {
+                        this.possibleTabs = { TAB_GENERAL, TAB_ACTIONS };
+                    } else if (thiz.gridElement.type === GridElement.ELEMENT_TYPE_PREDICTION) {
+                        this.possibleTabs = { TAB_ACTIONS };
+                    } else if (thiz.gridElement.type === GridElement.ELEMENT_TYPE_LIVE) {
+                        this.possibleTabs = { TAB_GENERAL, TAB_LIVE_DATA, TAB_IMAGE, TAB_ACTIONS };
+                    } else if (thiz.gridElement.type === GridElement.ELEMENT_TYPE_MATRIX_CONVERSATION) {
+                        this.possibleTabs = { TAB_GENERAL, TAB_ACTIONS };
+                    }
+                    thiz.originalGridElement = JSON.parse(JSON.stringify(thiz.gridElement));
+                });
+            },
+            resetInternal() {
+                this.gridElement = this.originalGridElement = null;
+            },
+            preventDefault(event) {
+                event.preventDefault();
+            },
+            openHelp() {
+                helpService.openHelp();
+            },
+            close() {
+                this.$emit('close');
+            }
+        },
+        mounted() {
+            this.editElementId = this.editElementIdParam;
+            this.initInternal();
+            helpService.setHelpLocation('03_appearance_layout', '#edit-modal');
+        },
+        beforeDestroy() {
+            helpService.revertToLastLocation();
+        }
+    }
+</script>
+
+<style scoped>
+.modal-container {
+    min-height: 50vh;
+}
+
+.srow {
+    margin-top: 1em;
+}
+</style>
+</body>
+</html>
