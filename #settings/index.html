@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5439326873004541"	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<head>
+    <title>LogoRemakeFour</title>
+    <meta id="viewPortMeta" name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="UWnxfeRniUm-l7GAbNdqfZQmCCaAU3HB6jGOuEHZ26k" />
+	<meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="false"><meta name="application-name" content="LogoRemakeFour">
+	<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="LogoRemakeFour">
+    <meta name="google-adsense-account" content="ca-pub-5439326873004541">
+	<!-- Icons -->
+    <link rel="apple-touch-icon" href="https://logoremakefor1530.github.io/apple-touch-icon.png">
+	<link rel="icon" href="https://logoremakefour1530.github.io/favicon.ico" type="image/png">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Tilt%20Warp" rel="stylesheet">
+
+	<link rel="robots" href=https://logoremakefour1530.github.io/robots.txt">
+    <link rel="stylesheet" href="https://logoremakefour1530.github.io/style.css">
+    <link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/fontawesome/css/all.css">
+	<link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/css/grid-styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W3Z15Z4TYR"></script>
+<script src="https://lrfeditor1807.github.io/DPlayer.min.js"></script>    
+</script>
+<div id="app" class="holy-grail">
+<h1 class="sr-only">Asterics AAC</h1>
+    <div id="touchElement" class="grid-container" style="z-index: 2; display: none; -webkit-touch-callout: none; -webkit-user-select: none;">
+    </div>
+    <audio style="display: none" id="audioPlayer" src="" preload="none"></audio>
+    <video style="display: none" id="videoPlayer" src="" preload="none"></video>
+    <notification-bar ref="notificationBar"></notification-bar>
+    <progress-bar-modal v-show="showModal === modalTypes.MODAL_PROGRESSBAR" ref="progressBar" @close="showModal = null"></progress-bar-modal>
+    <search-modal v-if="showModal === modalTypes.MODAL_SEARCH" @close="showModal = null;" :route-to-edit="Router.getCurrentView() === Router.VIEWS.GridEditView" :options="modalOptions"></search-modal>
+    <message-box v-show="showModal === modalTypes.MODAL_MESSAGEBOX" ref="messageBox" @close="showModal = null"></message-box>
+    <div class="holy-grail-body" v-cloak>
+        <div class="holy-grail-sidebar-1 hg-sidebar no-print" v-show="showSidebar">
+            <div style="flex: 0 0 auto;">
+                <div class="show-mobile">
+                    <a tabindex="1" href="javascript:void(0)" :aria-label="$t('closeSidebar')" @click="closeSidebar()"><button tabindex="-1"><i class="fas fa-2x fa-bars inline"></i></button></a>
+                </div>
+                <div class="hide-mobile" style="display: inline-flex">
+                    <a tabindex="1" href="javascript:void(0)" :aria-label="$t('closeSidebar')" @click="closeSidebar()" style="margin: 0.2em 0.5em 0 1.2em"><i class="fas fa-2x fa-bars inline"></i></a>
+                    <a tabindex="-1" aria-hidden="true" href="javascript:void(0)" @click="toMain"><h1 class="inline hide-mobile"><img id="astericsIcon" src="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/img/asterics-aac-logo-raw.svg" height="40" alt="Asterics AAC"/></h1></a>
+                </div>
+            </div>
+
+            <nav role="navigation" class="srow content" style="flex: 1 1 auto" accesskey="1">
+                <div v-if="currentUser">
+                    <h2 class="hide-mobile" style="margin-top: 1.5em;">{{ $t('navigation') }}</h2>
+                    <br class="show-mobile" aria-hidden="true"/>
+                    <ul>
+                        <li><a tabindex="2" href="javascript:void(0)" @click="toMain" :aria-label="$t('mainView')"><button tabindex="-1"><i class="fas fa-2x fa-home"></i><span class="hide-mobile">{{ $t('mainView') }}</span></button></a></li>
+                        <li><a tabindex="3" href="#grids" :aria-label="$t('manageGrids')"><button tabindex="-1"><i class="fas fa-2x fa-list-ul"></i><span class="hide-mobile">{{ $t('manageGrids') }}</span></button></a></li>
+                        <li><a tabindex="4" href="#dictionaries" :aria-label="$t('manageDictionaries')"><button tabindex="-1"><i class="fas fa-2x fa-book"></i><span class="hide-mobile">{{ $t('manageDictionaries') }}</span></button></a></li>
+                    </ul>
+                </div>
+                <!-- main script -->
+<script type="application/javascript">
+    //get and check data
+    getData('https://logoremakefour1530.github.io/AsTeRICS-Grid-Data/communicators/ARASAAC Global Grid Core Communicator/es/ARASAAC_Global_Grid_Core_Communicator_ES.grd.json);
+
+    function gotDataCallback(data) {
+        data = parseJson(data);
+        data = data.grids;
+        removeElement('loading');
+
+        //create headings and buttons
+        for (var i = 0; i < data.length; i++) { //grids
+            var grid = data[i];
+            var gridLabel = grid.label;
+            var elements = grid.gridElements;
+            var first = true;
+            for (var j = 0; j < elements.length; j++) { //elements
+                var element = elements[j];
+                var actions = element.actions;
+                if(actions && actions.length > 0) {
+                    for (var k = 0; k < actions.length; k++) { //elements
+                        var action = actions[k];
+                        if(action.modelName == "GridActionARE") {
+                            if(first) {
+                                first = false;
+                                var titleElem = createTitle(gridLabel, 'row col-xs-12');
+                                appendElement(titleElem);
+                            }
+                            var button = createButton(element.label, "", "sendDataToInputPort('" + action.componentId + "', '" + action.dataPortId + "', '" + action.dataPortSendData + "')");
+                            appendElement(button);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function appendElement(element) {
+        document.getElementById("controls").appendChild(element);
+    }
+
+    function log(string) {
+        if(!MODE_COMPATIBILITY) {
+            console.log(string);
+        }
+    }
+
+    if(!MODE_COMPATIBILITY) {
+        i18n.translatePage();
+        window.onkeydown = function(e) {
+            var key = e.keyCode ? e.keyCode : e.which;
+            if(e.ctrlKey && e.altKey && key >= 49 && key <= 57) { //Ctrl + Alt + [1-9]
+                var num = key - 48;
+                var button = document.getElementsByClassName('action-button')[num-1];
+                if(button) {
+                    button.click();
+                }
+            }
+        }
+    }
+</script>		
+                <h2 class="hide-mobile">{{ $t('users') }}</h2>
+                <ul>
+                    <li><a tabindex="5" href="#login" :aria-label="$t('changeUser')">
+                        <button tabindex="-1">
+                            <i class="fas fa-2x fa-users"></i><span v-show="!currentUser" class="hide-mobile">{{ $t('login') }}</span><span v-show="currentUser" class="hide-mobile">{{ $t('changeUser') }}</span>
+                        </button></a>
+                    </li>
+                    <li class="hide-mobile"><a tabindex="6" href="#register" :aria-label="$t('addOnlineUser')"><button tabindex="-1"><i class="fas fa-2x fa-user-plus"></i><span class="hide-mobile">{{ $t('addOnlineUser') }}</span></button></a></li>
+                    <li class="hide-mobile"><a tabindex="7" href="#add" :aria-label="$t('addOfflineUser')"><button tabindex="-1"><i class="fas fa-2x fa-user-plus"></i><span>{{ $t('addOfflineUser') }}</span></button></a></li>
+                </ul>
+
+                <br class="hide-mobile" aria-hidden="true"/>
+                <ul style="margin-bottom: 0;">
+                    <li v-show="currentUser"><a tabindex="8" href="#settings" :aria-label="$t('settings')"><button tabindex="-1"><i class="fas fa-2x fa-cog"></i><span class="hide-mobile">{{ $t('settings') }}</span></button></a></li>
+                    <li class="hide-mobile"><a tabindex="9" href="#about" :aria-label="$t('aboutAstericsGrid')"><button tabindex="-1"><i class="fas fa-2x fa-info-circle"></i><span class="hide-mobile">{{ $t('aboutAstericsGrid') }}</span></button></a></li>
+                    <li><a tabindex="10" href="#help" :aria-label="$t('help')"><button tabindex="-1" id="helpButton"><i class="fas fa-2x fa-question-circle"></i><span class="hide-mobile">{{ $t('help') }}</span></button></a></li>
+                    <li class="show-mobile"><a tabindex="11" href="javascript:;" :aria-label="$t('more')" @click="moreNavigation()" id="moreNavigation"><button tabindex="-1"><i class="fas fa-2x fa-ellipsis-v"></i></button></a></li>
+                </ul>
+            </nav>
+            <div style="flex: 0 0 auto;" id="syncVisualizationWrapper">
+                <span v-show="currentUser && !isLocalUser" class="hide-mobile"><span>{{ $t('loggedInAs') }}</span> <i>{{currentUser}}</i></span>
+                <span v-show="currentUser && isLocalUser" class="hide-mobile"><span>{{ $t('usingOfflineUser') }}</span> <i>{{currentUser}}</i></span>
+                <span v-show="!currentUser" class="hide-mobile">{{ $t('notLoggedIn') }}</span>
+                <span id="syncVisualization" v-if="currentUser && !isLocalUser" class="fa-stack fa-1x right" :title="syncState | translate">
+                    <i class="fas fa-cloud fa-stack-2x" style="color: lightblue"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_SYNCINC" class="fas fa-sync-alt fa-stack-1x fa-spin"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_SYNCED" class="fas fa-check fa-stack-1x"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_STOPPED" class="fas fa-pause fa-stack-1x"></i>
+                    <i v-show="syncState === constants.DB_SYNC_STATE_ONLINEONLY" class="fas fa-globe fa-stack-1x"></i>
+                    <i v-show="!syncState || syncState === constants.DB_SYNC_STATE_FAIL" class="fas fa-times fa-stack-1x"></i>
+                </span>
+                <span id="syncVisualization2" v-if="currentUser && isLocalUser && syncState === constants.DB_SYNC_STATE_SYNCINC" class="fa-stack fa-1x right" :title="$t('cachingImages')">
+                    <i class="fas fa-sync-alt fa-stack-1x fa-spin"></i>
+                </span>
+            </div>
+        </div>
+        <main role="main" class="holy-grail-content" accesskey="2">
+            <!-- Main page content -->
+            <div class="srow content text-content" v-if="!component">
+                <div class="grid-container grid-mask">
+                    <i class="fas fa-4x fa-spinner fa-spin"></i>
+                </div>
+            </div>
+            <component v-if="component" v-bind:is="component" v-bind="properties" :key="componentKey"></component>
+        </main>
+    </div>
+  </div><template>
+    <div class="overflow-content">
+        <header-icon full-header="true"></header-icon>
+        <nav-tabs v-model="currentTab" @input="saveState = SAVE_STATES.STATE_INITIAL" :tab-labels="Object.keys(TABS)"/>
+        <div style="position: relative">
+            <span style="position: absolute; right: 1em; top: 1em">
+                <span v-if="saveState === SAVE_STATES.STATE_SAVING" class="fas fa-spin fa-spinner"/>
+                <span v-if="saveState === SAVE_STATES.STATE_SAVED" class="fas fa-check"/>
+            </span>
+        </div>
+        <div class="srow content spaced mt-4" v-if="metadata">
+            <settings-general v-if="currentTab === TABS.TAB_GENERAL" :metadata="metadata" :user-settings-local="userSettingsLocal" :app-settings="appSettings" @changing="onChanging" @changed="onChanged"/>
+            <settings-language v-if="currentTab === TABS.TAB_LANGUAGE" :metadata="metadata" :user-settings-local="userSettingsLocal" @changing="onChanging" @changed="onChanged"/>
+            <settings-appearance v-if="currentTab === TABS.TAB_APPEARANCE" :metadata="metadata" :user-settings-local="userSettingsLocal" @changing="onChanging" @changed="onChanged"/>
+            <settings-input-methods v-if="currentTab === TABS.TAB_INPUTMETHODS" :metadata="metadata" :user-settings-local="userSettingsLocal" @changing="onChanging" @changed="onChanged"/>
+            <settings-integrations v-if="currentTab === TABS.TAB_INTEGRATIONS" :metadata="metadata" :user-settings-local="userSettingsLocal" :app-settings="appSettings" @changing="onChanging" @changed="onChanged"/>
+        </div>
+        <div class="bottom-spacer"></div>
+    </div>
+</template>
+
+<script>
+    import {dataService} from "../../js/service/data/dataService";
+    import {localStorageService} from "../../js/service/data/localStorageService";
+    import HeaderIcon from '../../vue-components/components/headerIcon.vue'
+    import NavTabs from '../components/nav-tabs.vue';
+    import SettingsGeneral from '.https://logoremakefour1530.github.io/AsTeRICS-Grid/settings/settingsGeneral.vue';
+    import SettingsLanguage from '.https://logoremakefour1530.github.io/AsTeRICS-Grid/settings/settingsLanguage.vue';
+    import SettingsIntegrations from '.https://logoremakefour1530.github.io/AsTeRICS-Grid/settings/settingsIntegrations.vue';
+    import SettingsAppearance from '.https://logoremakefour1530.github.io/AsTeRICS-Grid/settings/settingsAppearance.vue';
+    import SettingsInputMethods from '.https://logoremakefour1530.github.io/AsTeRICS-Grid/settings/settingsInputMethods.vue';
+
+    const TABS = {
+        TAB_GENERAL: 'TAB_GENERAL',
+        TAB_LANGUAGE: 'TAB_LANGUAGE',
+        TAB_APPEARANCE: 'TAB_APPEARANCE',
+        TAB_INPUTMETHODS: 'TAB_INPUTMETHODS',
+        TAB_INTEGRATIONS: 'TAB_INTEGRATIONS'
+    };
+
+    const SAVE_STATES = {
+        STATE_INITIAL: 'STATE_INITIAL',
+        STATE_SAVING: 'STATE_SAVING',
+        STATE_SAVED: 'STATE_SAVED'
+    };
+
+    export default {
+        components: { SettingsInputMethods, SettingsAppearance, SettingsIntegrations, SettingsLanguage, SettingsGeneral, NavTabs, HeaderIcon},
+        props: [],
+        data() {
+            return {
+                metadata: null,
+                appSettings: localStorageService.getAppSettings(),
+                userSettingsLocal: localStorageService.getUserSettings(),
+                TABS: TABS,
+                currentTab: TABS.TAB_GENERAL,
+                SAVE_STATES: SAVE_STATES,
+                saveState: SAVE_STATES.STATE_INITIAL
+            }
+        },
+        methods: {
+            onChanging() {
+                this.saveState = SAVE_STATES.STATE_SAVING;
+            },
+            onChanged() {
+                this.saveState = SAVE_STATES.STATE_SAVED;
+            }
+        },
+        async mounted() {
+            let metadata = await dataService.getMetadata();
+            this.metadata = JSON.parse(JSON.stringify(metadata));
+        }
+    }
+</script>
+
+<style scoped>
+    .content {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 auto;
+    }
+    h2 {
+        margin-bottom: 0.5em;
+    }
+    h3 {
+        margin-bottom: 0.5em;
+    }
+    .srow {
+        margin-bottom: 1.5em;
+    }
+</style>
+</body>
+</html>
