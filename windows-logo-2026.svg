@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <linearGradient id="windowsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0078D4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#107C10;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="240" height="240" fill="#ffffff"/>
+
+  <!-- Windows 12 Four Squares Logo with Modern Design -->
+  <g filter="url(#shadow)" transform="translate(60, 60)">
+    <!-- Top Left Square - Blue -->
+    <rect x="0" y="0" width="50" height="50" fill="#0078D4" rx="4"/>
+    
+    <!-- Top Right Square - Green -->
+    <rect x="60" y="0" width="50" height="50" fill="#107C10" rx="4"/>
+    
+    <!-- Bottom Left Square - Orange -->
+    <rect x="0" y="60" width="50" height="50" fill="#FFB900" rx="4"/>
+    
+    <!-- Bottom Right Square - Red -->
+    <rect x="60" y="60" width="50" height="50" fill="#F25022" rx="4"/>
+  </g>
+
+  <!-- Year 2026 Text -->
+  <text x="120" y="200" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#0078D4">
+    Windows 12
+  </text>
+  <text x="120" y="225" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666666">
+    2026
+  </text>
+</svg>
