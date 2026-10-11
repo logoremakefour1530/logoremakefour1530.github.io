@@ -1,0 +1,42 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Head -->
+  <circle cx="100" cy="100" r="70" fill="#FF6B1A"/>
+  
+  <!-- Left ear -->
+  <ellipse cx="60" cy="45" rx="18" ry="28" fill="#FF6B1A"/>
+  <ellipse cx="60" cy="45" rx="12" ry="20" fill="#FF8C42"/>
+  
+  <!-- Right ear -->
+  <ellipse cx="140" cy="45" rx="18" ry="28" fill="#FF6B1A"/>
+  <ellipse cx="140" cy="45" rx="12" ry="20" fill="#FF8C42"/>
+  
+  <!-- Left eye white -->
+  <ellipse cx="75" cy="85" rx="15" ry="20" fill="white"/>
+  
+  <!-- Right eye white -->
+  <ellipse cx="125" cy="85" rx="15" ry="20" fill="white"/>
+  
+  <!-- Left pupil -->
+  <circle cx="75" cy="90" r="8" fill="#333"/>
+  <circle cx="77" cy="88" r="3" fill="white"/>
+  
+  <!-- Right pupil -->
+  <circle cx="125" cy="90" r="8" fill="#333"/>
+  <circle cx="127" cy="88" r="3" fill="white"/>
+  
+  <!-- Snout/nose area -->
+  <ellipse cx="100" cy="130" rx="25" ry="20" fill="#FF8C42"/>
+  
+  <!-- Nose -->
+  <ellipse cx="100" cy="125" rx="8" ry="6" fill="#333"/>
+  
+  <!-- Mouth -->
+  <path d="M 100 130 Q 95 138 85 135" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 100 130 Q 105 138 115 135" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Tail curl around body (curved tail) -->
+  <path d="M 160 110 Q 180 120 175 145 Q 170 160 150 155" stroke="#FF6B1A" stroke-width="14" fill="none" stroke-linecap="round"/>
+  
+  <!-- Belly spot -->
+  <ellipse cx="100" cy="115" rx="35" ry="30" fill="#FFD700" opacity="0.6"/>
+</svg>
