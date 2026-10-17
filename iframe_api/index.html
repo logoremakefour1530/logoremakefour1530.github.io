@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Iframe Collections</title>
+  <style>
+    :root {
+      --gap: 16px;
+      --card-bg: #fff;
+      --card-border: #e6e6e6;
+      --muted: #666;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      background: #f7f7f8;
+      color: #111;
+      line-height: 1.4;
+    }
+    header {
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(90deg,#0f172a,#0b3a6b);
+      color: white;
+    }
+    header h1 { margin: 0; font-size: 1.2rem; }
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 16px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--gap);
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
+    }
+    .card h3 {
+      margin: 12px 12px 6px;
+      font-size: 1rem;
+    }
+    .iframe-wrap {
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      flex: 1 1 auto;
+      background: #000;
+    }
+    .iframe-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+    .card .links {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .card .links a { color: #0b66c3; text-decoration: none; }
+    .note {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      padding: 0 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    @media (max-width:420px){
+      .iframe-wrap { padding-top: 66.66%; } /* taller on narrow screens */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Iframe Collections</h1>
+    <div style="font-size:0.9rem; opacity:0.9; margin-top:6px;">YouTube, Facebook (NBA), Scratch, LinkedIn, Google, Spotify, Giphy</div>
+  </header>
+
+  <div class="note">
+    Note: Some websites disallow embedding (X-Frame-Options or Content-Security-Policy) and may show a blank/blocked frame; open the link if that happens.
+  </div>
+
+  <main class="container">
+    <!-- YouTube Crazy Frog (Axel F) -->
+    <section class="card">
+      <h3>YouTube — Crazy Frog (Axel F)</h3>
+      <div class="iframe-wrap">
+        <!-- Replace VIDEO_ID below if you prefer a different Crazy Frog video -->
+        <iframe
+          src="https://www.youtube.com/embed/k85mRPqvMbE"
+          title="Crazy Frog - Axel F"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="links">
+        <span>Video embed</span>
+        <a href="https://www.youtube.com/results?search_query=github" target="_blank" rel="noopener">Open on YouTube URL GitHub https://GitHub.com</a>
+      </div>
+    </section>
+
+    <!-- Facebook NBA -->
+    <section class="card">
+      <h3>Facebook — NBA</h3>
+      <div class="iframe-wrap">
+        <iframe
+          src="https://www.facebook.com/nba"
+          title="Facebook NBA"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        ></iframe>
+      </div>
+      <div class="links">
+        <span>Facebook page</span>
+        <a href="https://www.facebook.com/nba" target="_blank" rel="noopener">Open on Facebook</a>
+      </div>
+    </section>
+
+    <!-- Scratch Game (provided embed) -->
+    <section class="card">
+      <h3>Scratch — Embedded Game</h3>
+      <div class="iframe-wrap">
+        <iframe
+          src="https://scratch.mit.edu/projects/1263928291/embed"
+          title="Scratch Project"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="links">
+        <span>Scratch embed</span>
+        <a href="https://scratch.mit.edu/projects/1263928291" target="_blank" rel="noopener">Open on Scratch</a>
+      </div>
+    </section>
+
+    <!-- LinkedIn -->
+    <section class="card">
+      <h3>LinkedIn</h3>
+      <div class="iframe-wrap">
+        <iframe
+          src="https://www.linkedin.com"
+          title="LinkedIn"
+          allow="clipboard-write; encrypted-media; picture-in-picture">
+        </iframe>
+      </div>
+      <div class="links">
+        <span>LinkedIn</span>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener">Open on LinkedIn</a>
+      </div>
+    </section>
+
+    <!-- Google Search -->
+    <section class="card">
+      <h3>Google — Search</h3>
+      <div class="iframe-wrap">
+        <iframe
+          src="https://www.google.com"
+          title="Google Search"
+          allow="clipboard-write; encrypted-media; picture-in-picture">
+        </iframe>
+      </div>
+      <div class="links">
+        <span>Google homepage</span>
+        <a href="https://www.google.com" target="_blank" rel="noopener">Open Google</a>
+      </div>
+    </section>
+
+    <!-- Spotify Rick Astley -->
+    <section class="card">
+      <h3>Spotify — Rick Astley (Never Gonna Give You Up)</h3>
+      <div class="iframe-wrap">
+        <!-- Spotify embed for the track "Never Gonna Give You Up" -->
+        <iframe
+          src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC"
+          title="Spotify - Never Gonna Give You Up"
+          allow="autoplay; encrypted-media"
+        ></iframe>
+      </div>
+      <div class="links">
+        <span>Spotify track</span>
+        <a href="https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC" target="_blank" rel="noopener">Open on Spotify</a>
+      </div>
+    </section>
+
+    <!-- Giphy Elmo -->
+    <section class="card">
+      <h3>Giphy — Elmo (search)</h3>
+      <div class="iframe-wrap">
+        <iframe
+          src="https://giphy.com/search/elmo"
+          title="Giphy Elmo"
+          allow="clipboard-write; encrypted-media; picture-in-picture">
+        </iframe>
+      </div>
+      <div class="links">
+        <span>Giphy search</span>
+        <a href="https://giphy.com/search/elmo" target="_blank" rel="noopener">Open on Giphy</a>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
