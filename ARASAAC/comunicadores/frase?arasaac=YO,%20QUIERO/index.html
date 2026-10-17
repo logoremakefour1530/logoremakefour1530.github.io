@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Comunicador ARASAAC - Frase acumulada</title>
+  <style>
+    :root{
+      --accent:#2b7cff;
+      --bg:#f6f8fb;
+      --tile-bg:#ffffff;
+      --muted:#666;
+      --danger:#d9534f;
+    }
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      margin: 0;
+      padding: 18px;
+      color: #111;
+    }
+    .container{
+      max-width:900px;
+      margin: 0 auto;
+    }
+    h1{margin:0 0 12px 0;font-size:20px;}
+    .board{
+      display:flex;
+      gap:12px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    .pictogram{
+      width:150px;
+      background:var(--tile-bg);
+      border-radius:8px;
+      box-shadow:0 1px 3px rgba(0,0,0,.08);
+      padding:10px;
+      text-align:center;
+      cursor:pointer;
+      user-select:none;
+      transition:transform .08s;
+    }
+    .pictogram:active{transform:scale(.99)}
+    .pictogram img{
+      width:100%;
+      height:110px;
+      object-fit:contain;
+      background:transparent;
+    }
+    .pictogram .label{margin-top:8px;font-weight:600}
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-bottom:16px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      background:var(--tile-bg);
+      border-radius:8px;
+      border:1px solid rgba(0,0,0,.06);
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn.primary{background:var(--accent); color:white; border:none}
+    .btn.warn{background:var(--danger); color:white; border:none}
+    .toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:8px;
+      background:transparent;
+      border:1px solid rgba(0,0,0,.06);
+      cursor:pointer;
+    }
+    .phrase{
+      min-height:90px;
+      background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.95));
+      border-radius:10px;
+      padding:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      box-shadow:0 1px 2px rgba(0,0,0,.04);
+      margin-bottom:12px;
+    }
+    .phrase-empty{color:var(--muted); padding:8px}
+    .tile{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:var(--tile-bg);
+      padding:6px;
+      border-radius:8px;
+      box-shadow:0 1px 2px rgba(0,0,0,.04);
+    }
+    .tile img{width:48px;height:48px;object-fit:contain;border-radius:6px}
+    .tile .txt{font-weight:700}
+    .tiny-btn{
+      background:transparent;border:none;cursor:pointer;padding:6px;border-radius:6px;
+    }
+    footer{margin-top:18px;color:#444;font-size:13px}
+    .muted{color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Comunicador ARASAAC — Frase acumulada</h1>
+    <p class="muted">Toca los pictogramas para añadirlos a la frase. Voz: Español latinoamericano (si está disponible).</p>
+
+    <div class="board" id="inputBoard">
+      <!-- Pictogramas: YO y QUERER -->
+      <div class="pictogram" data-text="YO" data-src="https://api.arasaac.org/api/pictograms/6632" title="Añadir YO">
+        <img alt="YO" src="https://api.arasaac.org/api/pictograms/6632" onerror="handleImgError(this,'https://api.arasaac.org/api/pictograms/6632')"/>
+        <div class="label">YO</div>
+      </div>
+
+      <div class="pictogram" data-text="QUERER" data-src="https://api.arasaac.org/api/pictograms/5441" title="Añadir QUERER">
+        <img alt="QUERER" src="https://api.arasaac.org/api/pictograms/5441" onerror="handleImgError(this,'https://api.arasaac.org/api/pictograms/5441')"/>
+        <div class="label">QUERER</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="playBtn" title="Reproducir">
+        <!-- Play SVG -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M5 3v18l15-9L5 3z" fill="currentColor"/>
+        </svg>
+        Reproducir
+      </button>
+
+      <button class="toggle" id="continuousToggle" title="Modo continuo (leer palabra por palabra)">
+        <!-- Continuous icon (small play with lines) -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M4 4v16l9-8-9-8z" fill="currentColor"/>
+          <path d="M18 7v2a3 3 0 0 1 0 6v2a5 5 0 0 0 0-10z" fill="currentColor" opacity=".8"/>
+        </svg>
+        Continuo
+      </button>
+
+      <button class="btn" id="removeLastBtn" title="Quitar último">
+        <!-- Remove last SVG (minus / chevron) -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M19 13H5v-2h14v2z" fill="currentColor"/>
+        </svg>
+        Quitar último
+      </button>
+
+      <button class="btn warn" id="clearBtn" title="Borrar frase">
+        <!-- Trash SVG -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M6 7h12v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7z" stroke="currentColor" stroke-width="1" fill="none"/>
+          <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M9 4h6v2H9V4z" fill="currentColor" />
+        </svg>
+        Borrar frase
+      </button>
+    </div>
+
+    <div class="phrase" id="phraseArea" aria-live="polite">
+      <div class="phrase-empty" id="phraseEmpty">Frase vacía — añade pictogramas</div>
+    </div>
+
+    <footer>
+      <div class="muted">Diseñado para usar pictogramas ARASAAC. Los recursos (URLs) provienen de la API indicada.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Estado
+    const phrase = []; // {text, src}
+    const phraseArea = document.getElementById('phraseArea');
+    const phraseEmpty = document.getElementById('phraseEmpty');
+    const continuousToggle = document.getElementById('continuousToggle');
+    let continuousMode = false;
+
+    // Selección de voz: tratamos de elegir una voz "es-419" o "es-*" femenina si existe.
+    let selectedVoice = null;
+    function chooseSpanishLatinVoice(){
+      const voices = speechSynthesis.getVoices();
+      if(!voices || voices.length===0) return null;
+      // Preferencias heurísticas: es-419 (Latin America), es-MX, es-AR, es-CL, es-CO, etc.
+      const preferLangs = ['es-419','es-MX','es-AR','es-CL','es-CO','es-ES','es'];
+      // Try voices matching the languages in order and prefer names that hint female or "Google" wavenet
+      for(const lang of preferLangs){
+        const matches = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(lang.toLowerCase()));
+        if(matches.length){
+          // try to pick one that looks like a female voice by name (heuristic)
+          const femaleCandidates = matches.filter(v => /female|mujer|ana|sofia|sofia|lucia|laura|marina|sandra|carla|google/i.test(v.name));
+          if(femaleCandidates.length) return femaleCandidates[0];
+          // else pick first match
+          return matches[0];
+        }
+      }
+      // fallback: any es voice
+      const anyEs = voices.find(v => v.lang && v.lang.startsWith('es'));
+      if(anyEs) return anyEs;
+      // final fallback: first voice
+      return voices[0];
+    }
+
+    // Hook to ensure voices list loaded
+    function initVoices(){
+      selectedVoice = chooseSpanishLatinVoice();
+      // console info for debugging
+      console.log("Seleccionada voz:", selectedVoice);
+    }
+    speechSynthesis.onvoiceschanged = initVoices;
+    // Also try once in case already available
+    setTimeout(initVoices, 500);
+
+    // Helpers: add tile to phrase area
+    function renderPhrase(){
+      phraseArea.innerHTML = '';
+      if(phrase.length === 0){
+        phraseArea.appendChild(phraseEmpty);
+        return;
+      }
+      phrase.forEach((item, idx) => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        const img = document.createElement('img');
+        img.alt = item.text;
+        img.src = item.src || '';
+        img.onerror = function(){ handleImgError(img, item.src); };
+        const txt = document.createElement('div');
+        txt.className = 'txt';
+        txt.textContent = item.text;
+        const btn = document.createElement('button');
+        btn.className = 'tiny-btn';
+        btn.title = 'Quitar este pictograma';
+        btn.innerHTML = `
+          <!-- remove icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M19 13H5v-2h14v2z" fill="currentColor"/>
+          </svg>
+        `;
+        btn.addEventListener('click', () => {
+          phrase.splice(idx,1);
+          renderPhrase();
+        });
+        tile.appendChild(img);
+        tile.appendChild(txt);
+        tile.appendChild(btn);
+        phraseArea.appendChild(tile);
+      });
+    }
+
+    // Add pictogram from the input board
+    document.getElementById('inputBoard').addEventListener('click', function(ev){
+      const pic = ev.target.closest('.pictogram');
+      if(!pic) return;
+      const text = pic.dataset.text || (pic.querySelector('.label') && pic.querySelector('.label').textContent) || 'PIC';
+      const src = pic.dataset.src || (pic.querySelector('img') && pic.querySelector('img').src) || '';
+      phrase.push({text: text.trim(), src});
+      renderPhrase();
+    });
+
+    // Play behavior
+    document.getElementById('playBtn').addEventListener('click', async function(){
+      if(phrase.length === 0) return;
+      const texts = phrase.map(t => t.text);
+      if(continuousMode){
+        // speak each pictogram individually with small pause
+        for(let i=0;i<texts.length;i++){
+          await speakText(texts[i]);
+          // small pause between words
+          await new Promise(res => setTimeout(res, 250));
+        }
+      } else {
+        // speak the full accumulated phrase. Join with spaces.
+        const full = texts.join(' ');
+        await speakText(full);
+      }
+    });
+
+    // Toggle continuous
+    continuousToggle.addEventListener('click', function(){
+      continuousMode = !continuousMode;
+      continuousToggle.style.background = continuousMode ? 'var(--accent)' : '';
+      continuousToggle.style.color = continuousMode ? 'white' : '';
+    });
+
+    // Remove last
+    document.getElementById('removeLastBtn').addEventListener('click', function(){
+      if(phrase.length === 0) return;
+      phrase.pop();
+      renderPhrase();
+    });
+
+    // Clear phrase
+    document.getElementById('clearBtn').addEventListener('click', function(){
+      phrase.length = 0;
+      renderPhrase();
+    });
+
+    // Speak helper using SpeechSynthesis
+    function speakText(text){
+      return new Promise((resolve, reject) => {
+        if(!('speechSynthesis' in window)){
+          alert('Tu navegador no soporta SpeechSynthesis.');
+          resolve();
+          return;
+        }
+        const utter = new SpeechSynthesisUtterance();
+        utter.text = text;
+        // Use Spanish Latin American if possible
+        if(selectedVoice){
+          utter.voice = selectedVoice;
+          // ensure lang set
+          utter.lang = selectedVoice.lang || 'es-419';
+        } else {
+          // fallback lang
+          utter.lang = 'es-419';
+        }
+        utter.rate = 0.95;
+        utter.pitch = 1.0;
+        utter.onend = () => resolve();
+        utter.onerror = (e) => {
+          console.error('Speech error', e);
+          resolve();
+        };
+        speechSynthesis.speak(utter);
+      });
+    }
+
+    // Attempt to load image when <img> src pointing to API returns JSON or fails.
+    async function handleImgError(imgEl, apiUrl){
+      // If the element already tried, avoid loops
+      if(imgEl.dataset.tried) return;
+      imgEl.dataset.tried = '1';
+      try {
+        const resp = await fetch(apiUrl, {cache:'force-cache'});
+        const contentType = resp.headers.get('content-type') || '';
+        if(contentType.includes('application/json') || contentType.includes('text/json')){
+          const json = await resp.json();
+          // Try several fields we might find in ARASAAC JSON
+          const candidates = [];
+          // Common guesses
+          if(json.url) candidates.push(json.url);
+          if(json.pictogram && json.pictogram.url) candidates.push(json.pictogram.url);
+          if(json.representations && Array.isArray(json.representations)){
+            json.representations.forEach(r => {
+              if(typeof r === 'string') candidates.push(r);
+              if(r && r.url) candidates.push(r.url);
+              if(r && r.src) candidates.push(r.src);
+              if(r && r.filename && json.id) {
+                // try constructing known static path (best-effort)
+                candidates.push(`https://static.arasaac.org/pictograms/${json.id}/${r.filename}`);
+              }
+            });
+          }
+          if(json.images && Array.isArray(json.images)){
+            json.images.forEach(i => { if(i.url) candidates.push(i.url) })
+          }
+          // Clean and test each candidate by attempting to load as blob
+          for(const c of candidates){
+            if(!c) continue;
+            try {
+              const r2 = await fetch(c);
+              const ct2 = r2.headers.get('content-type') || '';
+              if(ct2.startsWith('image/')){
+                const blob = await r2.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                imgEl.src = blobUrl;
+                return;
+              }
+            } catch(e){ /* ignore candidate */ }
+          }
+          // As last resort, try appending '/download' or '?download=true'
+          const tryUrls = [
+            apiUrl + '/download',
+            apiUrl + '?download=true',
+            apiUrl + '/svg',
+            apiUrl + '.png'
+          ];
+          for(const u of tryUrls){
+            try {
+              const r3 = await fetch(u);
+              const ct3 = r3.headers.get('content-type') || '';
+              if(ct3 && ct3.startsWith('image/')){
+                const blob = await r3.blob();
+                imgEl.src = URL.createObjectURL(blob);
+                return;
+              }
+            } catch(e){}
+          }
+        } else if(contentType.startsWith('image/')){
+          const blob = await resp.blob();
+          imgEl.src = URL.createObjectURL(blob);
+          return;
+        }
+      } catch (err){
+        console.warn('No se pudo obtener imagen desde API:', err);
+      }
+      // fallback: show text instead of image
+      const parent = imgEl.parentElement;
+      if(parent){
+        const txt = document.createElement('div');
+        txt.style.width = '100%';
+        txt.style.height = '110px';
+        txt.style.display = 'flex';
+        txt.style.alignItems = 'center';
+        txt.style.justifyContent = 'center';
+        txt.style.color = '#666';
+        txt.style.fontSize = '14px';
+        txt.textContent = imgEl.alt || 'Imagen no disponible';
+        parent.replaceChild(txt, imgEl);
+      }
+    }
+
+    // Inicial render
+    renderPhrase();
+  </script>
+</body>
+</html>
