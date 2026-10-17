@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" role="img" aria-labelledby="title desc">
+  <title id="title">Disney-inspired logo</title>
+  <desc id="desc">A stylized, Disney-inspired logo: castle silhouette with cursive wordmark and sparkles. This is an original design and not an exact copy of any trademarked Disney logo.</desc>
+
+  <defs>
+    <linearGradient id="gradBlue" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#2da6ff"/>
+      <stop offset="1" stop-color="#6be0ff"/>
+    </linearGradient>
+
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff7cc" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#ffd36b" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Castle silhouette -->
+  <g transform="translate(60,20)" fill="#1a74c7" filter="url(#softShadow)">
+    <!-- Main keep -->
+    <rect x="0" y="120" width="120" height="80" rx="6"/>
+    <!-- Left tower -->
+    <rect x="-40" y="80" width="40" height="120" rx="4"/>
+    <polygon points="-40,80 -20,60 0,80" fill="#1a74c7"/>
+    <!-- Right tower -->
+    <rect x="120" y="60" width="40" height="140" rx="4"/>
+    <polygon points="120,60 140,40 160,60" fill="#1a74c7"/>
+    <!-- Small tower -->
+    <rect x="40" y="40" width="40" height="160" rx="4"/>
+    <polygon points="40,40 60,20 80,40" fill="#1a74c7"/>
+    <!-- Gate -->
+    <rect x="36" y="150" width="48" height="50" rx="8" fill="#0e3f7a"/>
+    <!-- Flags -->
+    <polygon points="12,20 12,6 36,10" fill="#ff6b6b"/>
+    <polygon points="176,10 176,6 152,14" fill="#ff6b6b"/>
+  </g>
+
+  <!-- Sparkles around castle -->
+  <g transform="translate(40,0)" fill="url(#starGlow)" opacity="0.9">
+    <circle cx="190" cy="40" r="8"/>
+    <circle cx="240" cy="28" r="5"/>
+    <circle cx="260" cy="72" r="6"/>
+    <circle cx="320" cy="32" r="4"/>
+  </g>
+
+  <!-- Wordmark (cursive text using system/web-font fallback) -->
+  <!-- For best results include a cursive webfont (e.g., Pacifico) or convert this text to paths -->
+  <g transform="translate(260,0)">
+    <!-- Subtle outline -->
+    <text x="0" y="200" font-family="Pacifico, 'Brush Script MT', 'Segoe Script', cursive" font-size="140" font-weight="700"
+          fill="none" stroke="#0b2b4a" stroke-width="6" paint-order="stroke fill" stroke-linejoin="round" stroke-linecap="round">
+      Disney
+    </text>
+
+    <!-- Main filled text with gradient and light glow -->
+    <text x="0" y="200" font-family="Pacifico, 'Brush Script MT', 'Segoe Script', cursive" font-size="140" font-weight="700"
+          fill="url(#gradBlue)" style="filter:url(#softGlow);" paint-order="stroke fill">
+      Disney
+    </text>
+
+    <!-- Small star accent over the 'i' -->
+    <g transform="translate(130,78)">
+      <circle cx="0" cy="0" r="9" fill="#fffce6"/>
+      <path d="M-2,-6 L2,6 M-6,-2 L6,2 M-6,2 L6,-2" stroke="#ffd36b" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Optional tagline under the wordmark -->
+  <text x="260" y="250" font-family="Verdana, Geneva, sans-serif" font-size="16" fill="#083049" opacity="0.9">
+    AsTeRICS the Assistive Technology Rapid Integration & Construction Set of Disney
+  </text>
+</svg>
