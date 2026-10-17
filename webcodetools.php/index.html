@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Web Code Tools — Meta, Media & Inputs</title>
+
+  <!-- Basic meta -->
+  <meta name="description" content="Web Code Tools demo: meta tags generator, media embeds, forms and robots.txt generator." />
+  <meta name="keywords" content="meta,tags,open graph,video,audio,image,iframe,giphy,tiktok,arasaac,robots.txt,form,inputs" />
+  <meta name="google-site-verification" content="this Google Site Verification" />
+
+  <!-- Open Graph (primary example: Website). Commented examples for Profile/Product/Article below. -->
+  <meta property="og:title" content="Web Code Tools — Demo" />
+  <meta property="og:description" content="An HTML demo showing meta tags, Open Graph, media embeds, inputs, and robots.txt." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://example.com/" />
+  <meta property="og:image" content="https://logoremakefour8.github.io/lrfeditor/img/logoremakefourwtl_character.jpg" />
+
+  <!--
+  Example alternate Open Graph types (uncomment/modify as needed):
+  <meta property="og:type" content="profile" />
+  <meta property="profile:first_name" content="First" />
+  <meta property="profile:last_name" content="Last" />
+  <meta property="og:type" content="product" />
+  <meta property="product:price:amount" content="19.99" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-01-01T00:00:00Z" />
+  -->
+
+  <!-- JSON-LD / Schema.org examples for WebSite and Organization using the requested context URL -->
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://example.com/#website",
+        "url": "https://example.com/",
+        "name": "Web Code Tools",
+        "description": "Demo site demonstrating meta tags, media embeds and form inputs."
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://example.com/#organization",
+        "name": "Web Code Tools Org",
+        "url": "https://example.com/",
+        "logo": "https://logoremakefour8.github.io/lrfeditor/img/logoremakefourwtl_character.jpg"
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;margin:24px;background:#f7f9fb;color:#111}
+    header h1{margin:0 0 12px}
+    section.card{background:#fff;border:1px solid #e3e8ef;padding:16px;margin-bottom:18px;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    .media-row{display:flex;gap:16px;flex-wrap:wrap}
+    .media-row > *{flex:1 1 320px}
+    label{display:block;margin:8px 0 4px;font-weight:600}
+    input[type="text"], input[type="url"], input[type="email"], input[type="password"], input[type="search"], input[type="tel"], textarea, select {width:100%;padding:8px;border:1px solid #ccd7e6;border-radius:6px}
+    button{padding:8px 12px;border-radius:6px;border:0;background:#0366d6;color:#fff;cursor:pointer}
+    .muted{color:#6b7280;font-size:.92rem}
+    .small{font-size:.9rem}
+    pre{background:#0b1220;color:#dbeafe;padding:12px;border-radius:6px;overflow:auto}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Web Code Tools</h1>
+    <p class="muted">A single-page HTML demo including meta tag examples, media embeds, common input fields, reCAPTCHA placeholder, and a robots.txt generator.</p>
+  </header>
+
+  <!-- Meta tags preview and copy -->
+  <section class="card" id="meta-tools">
+    <h2>Meta Tags (Preview)</h2>
+    <p class="muted">These meta tags are in the &lt;head&gt; of this page. You can copy them for your site.</p>
+    <pre id="metaPreview" class="small" tabindex="0">
+&lt;meta charset="utf-8" /&gt;
+&lt;meta name="description" content="Web Code Tools demo: meta tags generator, media embeds, forms and robots.txt." /&gt;
+&lt;meta name="keywords" content="meta,tags,open graph,video,audio,image,iframe,giphy,tiktok,arasaac,robots.txt,form,inputs" /&gt;
+&lt;meta name="google-site-verification" content="this Google Site Verification" /&gt;
+&lt;meta property="og:title" content="Web Code Tools — Demo" /&gt;
+&lt;meta property="og:description" content="An HTML demo showing meta tags, Open Graph, media embeds, inputs, and robots.txt." /&gt;
+&lt;meta property="og:type" content="website" /&gt;
+    </pre>
+    <div class="row" style="margin-top:8px">
+      <button id="copyMeta">Copy meta to clipboard</button>
+      <button id="downloadLd">Download JSON-LD</button>
+      <span class="muted">JSON-LD uses context: http://schema.org</span>
+    </div>
+  </section>
+
+  <!-- Media: image, video, audio -->
+  <section class="card" id="media">
+    <h2>Media: Image, Video & Audio</h2>
+    <div class="media-row">
+      <!-- Image (provided) -->
+      <div>
+        <label>Example Image</label>
+        <img id="exampleImage" src="https://logoremakefour8.github.io/lrfeditor/img/logoremakefourwtl_character.jpg" alt="Example" style="max-width:100%;border-radius:6px;border:1px solid #e6eef9" />
+        <p class="muted small">Source: example image URL provided.</p>
+      </div>
+
+      <!-- Video Player (provided) -->
+      <div>
+        <label>Video Player</label>
+        <video controls width="100%" style="border-radius:6px;border:1px solid #e6eef9">
+          <source src="https://webcode.tools/media/video.mp4" type="video/mp4" />
+          Your browser does not support the video element.
+        </video>
+        <p class="muted small">Example video src: https://webcode.tools/media/video.mp4</p>
+      </div>
+
+      <!-- Audio Player (provided) -->
+      <div>
+        <label>Audio Player</label>
+        <audio controls style="width:100%;display:block">
+          <source src="https://webcode.tools/media/sound.mp3" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+        <p class="muted small">Example audio src: https://webcode.tools/media/sound.mp3</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Embeds: YouTube, generic embed, Giphy, Facebook, Dailymotion, TikTok, ARASAAC -->
+  <section class="card" id="embeds">
+    <h2>Embeds & Iframes</h2>
+
+    <label>YouTube iframe (example)</label>
+    <div style="aspect-ratio:16/9;border:1px solid #e6eef9;border-radius:6px;overflow:hidden">
+      <!-- Example YouTube embed (change id as needed) -->
+      <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <label style="margin-top:12px">Generic Embed / Load URL into iframe</label>
+    <div class="row">
+      <input id="embedUrl" type="url" placeholder="Enter URL to embed (e.g. https://example.com)" />
+      <button id="loadEmbed">Load</button>
+    </div>
+    <div id="embedFrameWrap" style="margin-top:8px;aspect-ratio:16/9;border:1px solid #e6eef9;border-radius:6px;overflow:hidden">
+      <iframe id="embedFrame" src="about:blank" style="width:100%;height:100%;border:0"></iframe>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+      <!-- Giphy embed example -->
+      <div style="min-width:240px;flex:1 1 320px">
+        <label>Giphy</label>
+        <iframe src="https://giphy.com/embed/l0HlSNOxJB956qwfK" width="100%" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <p class="muted small">Example Giphy embed</p>
+      </div>
+
+      <!-- Facebook video embed example -->
+      <div style="min-width:240px;flex:1 1 320px">
+        <label>Facebook (plugin example)</label>
+        <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379946729" width="100%" height="260" style="border:none;overflow:hidden" scrolling="no" frameBorder="0" allowFullScreen></iframe>
+        <p class="muted small">Facebook plugin example (may require Facebook cookie/session)</p>
+      </div>
+
+      <!-- Dailymotion -->
+      <div style="min-width:240px;flex:1 1 320px">
+        <label>Dailymotion</label>
+        <iframe frameborder="0" width="100%" height="260" src="https://www.dailymotion.com/embed/video/x7u5g1"></iframe>
+        <p class="muted small">Dailymotion embed example</p>
+      </div>
+
+      <!-- TikTok -->
+      <div style="min-width:240px;flex:1 1 320px">
+        <label>TikTok</label>
+        <iframe src="https://www.tiktok.com/embed/6837626824232197126" width="100%" height="360" frameborder="0" allowfullscreen></iframe>
+        <p class="muted small">TikTok embed example (some embeds may be restricted)</p>
+      </div>
+    </div>
+
+    <!-- ARASAAC example -->
+    <div style="margin-top:12px">
+      <label>ARASAAC Example (API root provided)</label>
+      <p class="muted small">API base: https://api.arasaac.org — below is an example iframe/player placeholder for user <strong>phonelrf</strong>.</p>
+      <!-- Note: ARASAAC endpoints differ; this is a placeholder demonstrating how you could use the API. -->
+      <div style="border:1px dashed #e6eef9;padding:10px;border-radius:6px">
+        <p class="small">ARASAAC media placeholder for user: <code>phonelrf</code></p>
+        <video controls style="width:100%;max-width:640px;border-radius:6px" id="arasaacVideo">
+          <!-- If you have a specific ARASAAC media URL, place it here. This demo uses a placeholder data URL. -->
+          <source src="" type="video/mp4" />
+          Your browser does not support the video element.
+        </video>
+        <p class="muted small">To load ARASAAC media, fetch files from the API (e.g. use endpoints under https://api.arasaac.org).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form & inputs -->
+  <section class="card" id="forms">
+    <h2>Form Controls & Inputs</h2>
+    <form id="demoForm" onsubmit="event.preventDefault();alert('Form submitted (demo).')">
+      <label>Email input</label>
+      <input type="email" name="email" placeholder="you@example.com" required />
+
+      <label>Password input</label>
+      <input type="password" name="password" placeholder="••••••••" />
+
+      <label>Search input</label>
+      <input type="search" name="q" placeholder="Search..." />
+
+      <label>URL input</label>
+      <input type="url" name="website" placeholder="https://example.com" />
+
+      <label>Image Input (enter image URL and click Load Image)</label>
+      <div class="row">
+        <input id="imageUrlInput" type="url" placeholder="Image URL" />
+        <button id="loadImageBtn" type="button">Load Image</button>
+      </div>
+      <div style="margin-top:8px">
+        <img id="loadedImagePreview" alt="Loaded preview" style="max-width:240px;border-radius:6px;display:none;border:1px solid #e6eef9" />
+      </div>
+
+      <label>Phone number input</label>
+      <input type="tel" name="phone" placeholder="+1 555 555 5555" />
+
+      <label>Text input</label>
+      <input type="text" name="fullname" placeholder="Full name" />
+
+      <label>Checkbox</label>
+      <div class="row">
+        <label><input type="checkbox" name="agree" /> Accept terms</label>
+      </div>
+
+      <label>Input button</label>
+      <div class="row">
+        <input type="button" value="Click me" onclick="alert('Input button clicked')" />
+      </div>
+
+      <label>reCAPTCHA placeholder</label>
+      <div style="border:1px dashed #e6eef9;padding:8px;border-radius:6px;">
+        <!-- This uses the provided string as the site-key (as requested) -->
+        <div class="g-recaptcha" data-sitekey="this Google Site Verification"></div>
+        <p class="muted small">reCAPTCHA script is included below; real verification requires a valid site key from Google.</p>
+      </div>
+
+      <div style="margin-top:12px">
+        <input type="submit" value="Submit" /> <!-- Example submit text: "Submit" -->
+        <a id="exampleLink" href="https://example.com" style="margin-left:12px">Click here</a> <!-- Example hyperlink text: "Click here" -->
+      </div>
+    </form>
+
+    <div style="margin-top:12px">
+      <strong>Bold text example:</strong> <span class="small">This is a <strong>bold</strong> word and a <span style="color:#0b63d6">span-styled</span> element.</span>
+    </div>
+  </section>
+
+  <!-- Robots.txt generator -->
+  <section class="card" id="robots">
+    <h2>Robots.txt Generator</h2>
+    <label>Sitemap URL</label>
+    <input id="sitemapUrl" type="url" placeholder="https://example.com/sitemap.xml" value="https://example.com/sitemap.xml" />
+
+    <label>Rules</label>
+    <div class="row">
+      <select id="ruleType">
+        <option value="allow">Allow</option>
+        <option value="disallow">Disallow</option>
+      </select>
+      <input id="rulePath" type="text" placeholder="/path/to/file-or-folder" value="/" />
+      <button id="addRule">Add</button>
+    </div>
+
+    <label style="margin-top:8px">Generated robots.txt</label>
+    <textarea id="robotsOutput" rows="6" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccd7e6"></textarea>
+    <div style="margin-top:8px" class="row">
+      <button id="downloadRobots">Download robots.txt</button>
+      <button id="resetRobots" type="button">Reset</button>
+      <span class="muted small">You can add multiple Allow/Disallow rules then download the robots.txt file.</span>
+    </div>
+  </section>
+
+  <footer style="margin-top:18px" class="muted small">
+    Demo created with the requested elements: video, image, audio, embeds (YouTube/Giphy/Facebook/Dailymotion/TikTok), ARASAAC placeholder (user: phonelrf), meta tags and JSON-LD using http://schema.org, form controls, reCAPTCHA placeholder, and robots.txt generator.
+  </footer>
+
+  <!-- Load Google reCAPTCHA (placeholder). For real use, supply a valid site key. -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <script>
+    // Copy meta preview
+    document.getElementById('copyMeta').addEventListener('click', async () => {
+      const text = document.getElementById('metaPreview').innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('Meta tags copied to clipboard');
+      } catch (err) {
+        alert('Copy failed: ' + err);
+      }
+    });
+
+    // Download JSON-LD
+    document.getElementById('downloadLd').addEventListener('click', () => {
+      const ld = document.querySelector('script[type="application/ld+json"]').innerText;
+      const blob = new Blob([ld], {type: 'application/ld+json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'schema.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // embed loader
+    document.getElementById('loadEmbed').addEventListener('click', () => {
+      const url = document.getElementById('embedUrl').value.trim();
+      const frame = document.getElementById('embedFrame');
+      if (!url) { alert('Enter a URL to embed'); return; }
+      // Basic validation: ensure value is absolute URL
+      try {
+        const u = new URL(url);
+        frame.src = u.href;
+      } catch (e) {
+        alert('Invalid URL');
+      }
+    });
+
+    // Image loader from input
+    document.getElementById('loadImageBtn').addEventListener('click', () => {
+      const url = document.getElementById('imageUrlInput').value.trim();
+      const img = document.getElementById('loadedImagePreview');
+      if (!url) { alert('Enter an image URL'); return; }
+      img.src = url;
+      img.style.display = 'block';
+      img.onerror = () => {
+        alert('Failed to load image. Check the URL and CORS settings.');
+        img.style.display = 'none';
+      };
+    });
+
+    // Robots.txt generator logic
+    let rules = [];
+    const robotsOutput = document.getElementById('robotsOutput');
+    function updateRobots() {
+      const lines = [];
+      lines.push('User-agent: *');
+      for (const r of rules) {
+        if (r.type === 'allow') lines.push('Allow: ' + r.path);
+        else lines.push('Disallow: ' + r.path);
+      }
+      const sitemap = document.getElementById('sitemapUrl').value.trim();
+      if (sitemap) lines.push('Sitemap: ' + sitemap);
+      robotsOutput.value = lines.join('\\n');
+    }
+    document.getElementById('addRule').addEventListener('click', () => {
+      const type = document.getElementById('ruleType').value;
+      const path = document.getElementById('rulePath').value.trim() || '/';
+      rules.push({type, path});
+      updateRobots();
+    });
+    document.getElementById('resetRobots').addEventListener('click', () => {
+      rules = [];
+      document.getElementById('sitemapUrl').value = 'https://example.com/sitemap.xml';
+      updateRobots();
+    });
+    // initial
+    rules = [{type:'allow', path:'/'}];
+    updateRobots();
+
+    // Download robots.txt
+    document.getElementById('downloadRobots').addEventListener('click', () => {
+      const blob = new Blob([robotsOutput.value], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'robots.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ARASAAC placeholder: if you have a direct media file URL from ARASAAC, set it here programmatically
+    // Example (placeholder): leave blank or set src to a known media file.
+    // document.querySelector('#arasaacVideo source').src = 'https://api.arasaac.org/some/media.mp4';
+    // document.querySelector('#arasaacVideo').load();
+  </script>
+</body>
+</html>                                                                                                                                   </html>
