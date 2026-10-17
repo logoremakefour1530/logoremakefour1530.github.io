@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OpenSymbols — Image Search</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google reCAPTCHA (replace data-sitekey with your key) -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <!-- Google AdSense placeholder (replace ca-pub-XXXXXXXX with your client id) -->
+  <script data-ad-client="ca-pub-XXXXXXXXXXXX" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+  <header>
+    <h1>OpenSymbols — Image Search</h1>
+    <p>Search images from the OpenSymbols image API and download results.</p>
+  </header>
+
+  <main>
+    <section class="search-panel">
+      <form id="searchForm">
+        <input id="q" type="search" placeholder="Search OpenSymbols images (e.g. 'heart', 'emoji')" required />
+        <button type="submit">Search</button>
+        <label class="checkbox"><input id="unsafe-mode" type="checkbox"> Allow cross-origin download fallback</label>
+      </form>
+      <div id="status" class="muted">Ready.</div>
+    </section>
+
+    <section id="resultsSection">
+      <div id="results" class="grid"></div>
+    </section>
+
+    <section id="moreCollections">
+      <h2>More Collections & Embeds</h2>
+      <div class="embeds">
+        <!-- YouTube embed example -->
+        <div class="embed">
+          <div class="embed-title">YouTube</div>
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- Facebook video plugin -->
+        <div class="embed">
+          <div class="embed-title">Facebook (example)</div>
+          <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379946729" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- Giphy -->
+        <div class="embed">
+          <div class="embed-title">Giphy</div>
+          <iframe src="https://giphy.com/embed/3oEjI6SIIHBdRxXI40" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- TikTok (may require platform script or be blocked in iframes) -->
+        <div class="embed">
+          <div class="embed-title">TikTok</div>
+          <iframe src="https://www.tiktok.com/embed/v2/6808362793901009925" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- LinkedIn embed example -->
+        <div class="embed">
+          <div class="embed-title">LinkedIn</div>
+          <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:6666666666666666666" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- Walmart product page (example) -->
+        <div class="embed">
+          <div class="embed-title">Walmart (product)</div>
+          <iframe src="https://www.walmart.com/ip/Example-Product/12345678" loading="lazy"></iframe>
+        </div>
+
+        <!-- DPlayer / Danmaku (example embed - uses external page or configured player) -->
+        <div class="embed">
+          <div class="embed-title">Danmaku (DPlayer demo iframe)</div>
+          <iframe src="https://dplayer.js.org/demo/" loading="lazy"></iframe>
+        </div>
+
+        <!-- Dailymotion -->
+        <div class="embed">
+          <div class="embed-title">Dailymotion</div>
+          <iframe src="https://www.dailymotion.com/embed/video/x7u5f9q" loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- Government of Chile -->
+        <div class="embed">
+          <div class="embed-title">gob.cl (Government of Chile)</div>
+          <iframe src="https://gob.cl" loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="ads" class="muted">
+      <!-- Example AdSense inline ad placeholder -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXX"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </section>
+  </main>
+
+  <footer>
+    <small>Note: some sites block embedding via X-Frame-Options/CSP — iframe embeds may not always load.</small>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
