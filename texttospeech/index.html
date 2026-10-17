@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Multi-language Text-to-Speech Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Text-to-Speech Demo — Multi-language & Brand-style Presets</h1>
+
+    <section class="notice">
+      <strong>Legal / usage note:</strong>
+      This demo uses the browser's speech synthesis voices. "Brand" and character voices are simulated presets (pitch/rate/voice heuristics) only — they are NOT the actual copyrighted or proprietary voices. Do not use this to impersonate people or copyrighted characters.
+    </section>
+
+    <form id="controls" onsubmit="return false;">
+      <label>
+        Language
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="pt-BR">Português (BR)</option>
+          <option value="pt">Português (PT)</option>
+          <option value="de">German</option>
+          <option value="nl">Dutch</option>
+          <option value="ru">Russian</option>
+          <option value="wo">Wolof</option>
+          <option value="ca">Catalan</option>
+        </select>
+      </label>
+
+      <label>
+        Voice (browser-provided)
+        <select id="voiceSelect"></select>
+      </label>
+
+      <label>
+        Brand / Character (simulated presets)
+        <select id="brandSelect">
+          <option value="">— none —</option>
+          <optgroup label="Brands (simulated)">
+            <option value="google">Google Voice (simulated)</option>
+            <option value="microsoft">Microsoft Voice (simulated)</option>
+            <option value="arasaac">ARASAAC Voice (simulated)</option>
+            <option value="breakingbad">Breaking Bad Web Voice (loader)</option>
+          </optgroup>
+          <optgroup label="Disney-style (simulated)">
+            <option value="woody">Woody (simulated)</option>
+            <option value="mcqueen">McQueen (simulated)</option>
+            <option value="jessie">Jessie (simulated)</option>
+            <option value="fox">Fox (Zootopia) (simulated)</option>
+            <option value="flash">Flash (Zootopia) (simulated)</option>
+            <option value="mickey">Mickey (simulated)</option>
+          </optgroup>
+        </select>
+      </label>
+
+      <div class="range-row">
+        <label>Pitch <input id="pitch" type="range" min="0.5" max="2" step="0.1" value="1" /></label>
+        <label>Rate <input id="rate" type="range" min="0.6" max="2" step="0.1" value="1" /></label>
+        <label>Volume <input id="volume" type="range" min="0" max="1" step="0.05" value="1" /></label>
+      </div>
+
+      <label>
+        Text to speak
+        <textarea id="text" rows="6">Hello — this is a text-to-speech demo. Select a language and voice, then press Speak.</textarea>
+      </label>
+
+      <div class="buttons">
+        <button id="speakBtn" class="primary">Speak</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="resumeBtn">Resume</button>
+        <button id="cancelBtn">Cancel</button>
+        <button id="loadBreakingBad" title="Load external Breaking Bad script">Load Breaking Bad Voice Script</button>
+      </div>
+
+      <details>
+        <summary>Integration notes (for cloud TTS)</summary>
+        <p>
+          If you have Google Cloud TTS or Microsoft Azure keys, you can integrate server-side and return audio to the browser. See commented examples in script.js.
+        </p>
+      </details>
+    </form>
+
+    <footer>
+      <small>Demo created for repository: logoremakefour1530/logoremakefour1530.github.io</small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
