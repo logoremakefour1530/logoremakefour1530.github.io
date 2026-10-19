@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Collection Tools — LogoRemakeFour</title>
+
+  <!-- DPlayer (Danmaku) -->
+  <link rel="stylesheet" href="https://unpkg.com/dplayer/dist/DPlayer.min.css" />
+  <script src="https://unpkg.com/dplayer/dist/DPlayer.min.js"></script>
+
+  <!-- Optional: Danmaku (DPlayer has built-in danmaku support via API, no extra lib needed here) -->
+
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa3b2; --accent:#4f9aff;
+      --panel:#0b1220;
+    }
+    body{font-family:Inter,system-ui,Segoe UI,Arial; margin:0; background:linear-gradient(180deg,#071125,#0d1b2a); color:#e6eef8;}
+    header{display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.04)}
+    header h1{font-size:18px;margin:0}
+    .container{max-width:1200px;margin:20px auto;padding:16px;}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .card{background:rgba(255,255,255,0.02);padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .section-title{font-size:14px;color:var(--accent);margin-bottom:12px}
+    iframe, .media, video, img{width:100%;border-radius:8px;border:0}
+    .cards-row{display:flex;gap:12px;flex-wrap:wrap}
+    /* Credit/Debit card style */
+    .cc{width:260px;height:160px;border-radius:12px;padding:16px;color:white;position:relative;box-shadow:0 6px 18px rgba(0,0,0,0.6);font-family: 'Segoe UI', Roboto, Arial}
+    .cc .chip{width:46px;height:32px;background:linear-gradient(180deg,#e6e1c1,#c9c6a2);border-radius:4px;margin-bottom:16px}
+    .cc .number{font-size:18px;letter-spacing:2px;margin-top:8px}
+    .cc .meta{display:flex;justify-content:space-between;margin-top:14px;font-size:13px;color:rgba(255,255,255,0.9)}
+    .cc.small{transform:scale(.95)}
+    .cc.visa{background:linear-gradient(135deg,#0b57a4,#083e79)}
+    .cc.master{background:linear-gradient(135deg,#8a3b0b,#5c2304)}
+
+    /* Loading / splash */
+    .splash{display:flex;gap:12px;align-items:center;justify-content:center;flex-direction:column;padding:30px}
+    .loader-svg{width:80px;height:80px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    input,button,select,textarea{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .btn{background:var(--accent);color:#042033;border:none;padding:8px 12px;cursor:pointer;border-radius:8px}
+    .muted{color:var(--muted);font-size:13px}
+    .media-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .messenger{display:flex;border-radius:8px;overflow:hidden;background:#051223}
+    .messenger .left{width:260px;border-right:1px solid rgba(255,255,255,0.03);padding:10px}
+    .messenger .right{flex:1;padding:10px}
+    .sticker{width:56px;height:56px;border-radius:8px;object-fit:cover;margin:6px;cursor:pointer}
+    footer{padding:18px;text-align:center;color:var(--muted);font-size:13px;margin-top:18px}
+    .small-note{font-size:12px;color:var(--muted)}
+    .form-row{display:flex;gap:8px;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://api.arasaac.org/api/pictograms/5441" alt="logo" width="44" height="44" style="border-radius:8px;background:#fff;padding:6px"/>
+    <div>
+      <h1>Collection Tools — LogoRemakeFour</h1>
+      <div class="small-note">Main page Collection Tools ↓ HTML Iframe, Credit Card, Media and Copyright</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Splash / Loading -->
+    <section class="card">
+      <div class="section-title">Splash & Loading Screens</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div class="card splash" style="width:320px">
+          <!-- Animated SVG loader -->
+          <svg class="loader-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#4f9aff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+            <circle cx="50" cy="50" r="40" stroke="url(#g)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="62.8 188.4">
+              <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="1.6s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <div style="font-weight:600;margin-top:8px">Loading...</div>
+          <div class="muted">Splash Text Collection Tools — Phone / PC / Tablet options</div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn" onclick="showSplash('phone')">Phone</button>
+            <button class="btn" onclick="showSplash('pc')">PC</button>
+            <button class="btn" onclick="showSplash('tablet')">Tablet</button>
+          </div>
+        </div>
+
+        <div class="card" style="flex:1;min-width:300px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="section-title">Selected Splash Preview</div>
+            <div class="muted" id="splashLabel">Default</div>
+          </div>
+          <div id="splashPreview" style="height:120px;border-radius:8px;margin-top:10px;background:linear-gradient(135deg,#081226,#0b1630);display:flex;align-items:center;justify-content:center">
+            <div style="text-align:center;color:#9fbbe8">
+              <div style="font-size:20px">Splash Screen</div>
+              <div class="muted">Lenovo Tablet: BabyBus Edition • Samsung Tablet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main grid -->
+    <section class="grid" style="margin-top:16px">
+      <!-- Iframes & embeds -->
+      <div class="card">
+        <div class="section-title">HTML Iframe Embeds</div>
+
+        <div style="display:flex;gap:8px;flex-direction:column">
+          <!-- YouTube (Rick Astley example) -->
+          <div>
+            <div class="muted">YouTube (Rick Astley example)</div>
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="height:220px;margin-top:8px"></iframe>
+          </div>
+
+          <!-- Google Maps embed (generic) -->
+          <div style="margin-top:12px">
+            <div class="muted">Google Maps</div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0192016777206!2d-122.42067908468196!3d37.77851917975837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808d6f5b4e45%3A0xbd6b5e8d8e0b0f3c!2sCity%20Hall%2C%20San%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1600000000000" height="220" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Facebook embed (video plugin) -->
+          <div style="margin-top:12px">
+            <div class="muted">Facebook (plugin embed)</div>
+            <!-- Note: FB plugin often requires app id and the widgets.js script; here is a generic iframe plugin -->
+            <iframe src="https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/10153231379946729/&show_text=0" height="220" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Giphy embed -->
+          <div style="margin-top:12px">
+            <div class="muted">Giphy</div>
+            <iframe src="https://giphy.com/embed/l0MYt5jPR6QX5pnqM" height="220" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Dailymotion -->
+          <div style="margin-top:12px">
+            <div class="muted">Dailymotion</div>
+            <iframe src="https://www.dailymotion.com/embed/video/x7vo1a" height="220" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Asterics AAC grid -->
+          <div style="margin-top:12px">
+            <div class="muted">Asterics AAC (grid.asterics.eu)</div>
+            <iframe src="https://grid.asterics.eu" height="360" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Twitch (requires parent param to match served host) -->
+          <div style="margin-top:12px">
+            <div class="muted">Twitch</div>
+            <!-- Note: Twitch embeds commonly require the 'parent' param to match your domain for security.
+                 When testing locally, replace 'localhost' with your host. -->
+            <iframe src="https://player.twitch.tv/?channel=twitch&parent=localhost" height="300" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Scratch Game embed (provided) -->
+          <div style="margin-top:12px">
+            <div class="muted">Scratch Game Embed</div>
+            <iframe src="https://scratch.mit.edu/projects/1263928291/embed" allowtransparency="true" height="402" style="margin-top:8px"></iframe>
+          </div>
+
+          <!-- Twitter embed -->
+          <div style="margin-top:12px">
+            <div class="muted">Twitter</div>
+            <blockquote class="twitter-tweet" style="margin-top:8px">
+              <p lang="en" dir="ltr">Example tweet embed — Twitter widget will render when served with platform script.</p>&mdash; LogoRemakeFour (@logoremakefour1530) <a href="https://twitter.com/logoremakefour1530/status/1">Oct 19, 2026</a>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media players & DPlayer (danmaku) -->
+      <div class="card">
+        <div class="section-title">Media — Video, Audio & Danmaku (DPlayer)</div>
+
+        <div class="media-row">
+          <div>
+            <div class="muted">Standard Video</div>
+            <video controls src="https://Cumple-plimplim.github.io/videos/0910.mp4" style="height:220px;margin-top:8px"></video>
+            <div class="muted" style="margin-top:8px">Audio sample</div>
+            <audio controls src="https://logoremakefour1530.github.io/sound-effects/output/interface/game/coin.wav" style="width:100%;margin-top:8px"></audio>
+          </div>
+          <div>
+            <div class="muted">Danmaku Video Player (DPlayer)</div>
+            <div id="dplayerContainer" style="height:260px;margin-top:8px"></div>
+            <div class="small-note" style="margin-top:8px">DPlayer demo with danmaku enabled</div>
+          </div>
+        </div>
+
+        <script>
+          // Initialize DPlayer with danmaku
+          try {
+            const dp = new DPlayer({
+              container: document.getElementById('dplayerContainer'),
+              video: {
+                url: 'https://Cumple-plimplim.github.io/videos/0910.mp4',
+                pic: 'https://api.arasaac.org/api/pictograms/5441',
+                type: 'auto'
+              },
+              danmaku: {
+                id: 'demo',
+                api: 'https://api.prprpr.me/dplayer/',
+                bottom: '10%',
+                unlimited: true
+              }
+            });
+            // Add an example danmaku
+            dp.danmaku.draw({
+              text: 'Hello from DPlayer demo!',
+              color: '#ff5555',
+              type: 0,
+            });
+          } catch (e) {
+            console.warn('DPlayer failed to initialize', e);
+          }
+        </script>
+      </div>
+
+      <!-- Credit / Debit Cards -->
+      <div class="card" style="grid-column:1/3">
+        <div class="section-title">Credit Card & Debit Card Examples</div>
+        <div class="muted">These are example UI cards for demonstration only. Do NOT use these numbers for real transactions.</div>
+
+        <div style="margin-top:12px" class="cards-row">
+          <!-- Visa - Gary Hamby (example) -->
+          <div class="cc visa">
+            <div class="chip"></div>
+            <div style="font-size:12px;opacity:.9">VISA</div>
+            <div class="number" id="card1">4111 1111 1111 1111</div>
+            <div class="meta"><div>Gary Hamby</div><div>05/29</div></div>
+            <div style="position:absolute;right:12px;bottom:12px;font-size:11px">CVV: 123</div>
+          </div>
+
+          <!-- MasterCard - Michael Davies -->
+          <div class="cc master">
+            <div class="chip"></div>
+            <div style="font-size:12px;opacity:.9">MasterCard</div>
+            <div class="number" id="card2">5555 5555 5555 4444</div>
+            <div class="meta"><div>Michael Davies</div><div>05/29</div></div>
+            <div style="position:absolute;right:12px;bottom:12px;font-size:11px">CVV: 256</div>
+          </div>
+
+          <!-- No name sample -->
+          <div class="cc master small" style="background:linear-gradient(135deg,#312e2f,#241f1f);">
+            <div class="chip"></div>
+            <div style="font-size:12px;opacity:.9">MasterCard</div>
+            <div class="number" id="card3">2229 3529 3988 6988</div>
+            <div class="meta"><div>No name</div><div>05/29</div></div>
+            <div style="position:absolute;right:12px;bottom:12px;font-size:11px">CVV: 256</div>
+          </div>
+
+          <!-- Pauley Obrien -->
+          <div class="cc master small" style="background:linear-gradient(135deg,#6b2b2b,#3f1b1b);">
+            <div class="chip"></div>
+            <div style="font-size:12px;opacity:.9">MasterCard</div>
+            <div class="number" id="card4">5105 1051 0510 5100</div>
+            <div class="meta"><div>Pauley Obrien</div><div>12/27</div></div>
+            <div style="position:absolute;right:12px;bottom:12px;font-size:11px">CVV: 789</div>
+          </div>
+
+          <!-- Rick Astley example author profile -->
+          <div class="cc master small" style="background:linear-gradient(135deg,#2b4a6b,#0b2548);">
+            <div class="chip"></div>
+            <div style="font-size:12px;opacity:.9">MasterCard (example author)</div>
+            <div class="number" id="card5">5105 1051 0510 5100</div>
+            <div class="meta"><div>Rick Astley</div><div>09/26</div></div>
+            <div style="position:absolute;right:12px;bottom:12px;font-size:11px">CVV: 321</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px" class="small-note">
+          Example debit card author profile entries: Gary Hamby (Visa), Michael Davies (MasterCard), Pauley Obrien (MasterCard), No name (2229352939886988), Rick Astley (example).
+        </div>
+      </div>
+
+      <!-- Login Forms & Profile controls -->
+      <div class="card">
+        <div class="section-title">Login — Online & Offline</div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:220px">
+            <div class="muted">Online Login (username, email, password, phone, verification)</div>
+            <div style="margin-top:8px">
+              <input placeholder="Username" id="onlineUser" style="width:100%;margin-bottom:8px" />
+              <input placeholder="Email" id="onlineEmail" style="width:100%;margin-bottom:8px" />
+              <input placeholder="Password" id="onlinePass" type="password" style="width:100%;margin-bottom:8px" />
+              <input placeholder="Phone number" id="onlinePhone" style="width:100%;margin-bottom:8px" />
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <input placeholder="Verification code" id="onlineCode" style="flex:1" />
+                <button class="btn" onclick="sendVerification()">Send code</button>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn" onclick="loginOnline()">Login Online</button>
+                <button onclick="refreshProfile()" class="btn">Refresh Profile Main Page</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1;min-width:220px">
+            <div class="muted">Offline Login (username & email)</div>
+            <div style="margin-top:8px">
+              <input placeholder="Offline Username" id="offlineUser" style="width:100%;margin-bottom:8px" />
+              <input placeholder="Offline Email" id="offlineEmail" style="width:100%;margin-bottom:8px" />
+              <div style="display:flex;gap:8px">
+                <button class="btn" onclick="loginOffline()">Login Offline</button>
+                <button class="btn" onclick="openProfile()">Open Profile</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="small-note">Refresh profile main page Collection Tools and login profile Collection Tools are available above.</div>
+      </div>
+
+      <!-- Camera & Recorder -->
+      <div class="card">
+        <div class="section-title">Camera & Recorder</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:260px">
+            <div class="muted">Camera Preview</div>
+            <video id="cameraPreview" autoplay playsinline style="height:220px;margin-top:8px;border-radius:8px;background:#000"></video>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="btn" onclick="startCamera()">Start Camera</button>
+              <button onclick="takeSnapshot()">Snapshot</button>
+            </div>
+            <canvas id="snapshotCanvas" width="320" height="240" style="display:none;margin-top:8px;border-radius:8px"></canvas>
+          </div>
+
+          <div style="flex:1;min-width:260px">
+            <div class="muted">Audio Recorder</div>
+            <div style="margin-top:8px">
+              <div id="recStatus" class="small-note">Idle</div>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button class="btn" onclick="startRecording()">Start Recording</button>
+                <button onclick="stopRecording()">Stop</button>
+                <button onclick="playLastAudio()">Play</button>
+                <a id="downloadAudio" class="small-note" style="align-self:center;margin-left:8px">Download</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text-to-Speech & ResponsiveVoice -->
+      <div class="card">
+        <div class="section-title">Text to Speech (ResponsiveVoice)</div>
+        <div>
+          <textarea id="ttsText" placeholder="Enter text to synthesize to MP3" style="width:100%;height:80px;margin-top:8px"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <select id="ttsVoice">
+              <option value="US English Female">US English Female</option>
+              <option value="UK English Male">UK English Male</option>
+              <option value="German Female">German Female</option>
+            </select>
+            <button class="btn" onclick="speakText()">Speak</button>
+            <button onclick="stopSpeak()">Stop</button>
+            <a id="ttsDownload" class="small-note" style="align-self:center">Download MP3 (if supported)</a>
+          </div>
+          <div class="small-note" style="margin-top:8px">Using ResponsiveVoice (https://responsivevoice.org). When used in production, ensure licensing terms are met.</div>
+        </div>
+      </div>
+
+      <!-- Messenger -->
+      <div class="card" style="grid-column:1/3">
+        <div class="section-title">Messenger — Camera, Text, Stickers, Voices, Taskbar</div>
+        <div class="messenger" style="height:260px">
+          <div class="left">
+            <div class="muted" style="margin-bottom:8px">Contacts / Stickers</div>
+            <div style="display:flex;flex-wrap:wrap">
+              <img src="https://api.arasaac.org/api/pictograms/5441" class="sticker" onclick="useSticker(this.src)" />
+              <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" class="sticker" onclick="useSticker(this.src)" />
+              <img src="https://via.placeholder.com/56" class="sticker" onclick="useSticker(this.src)" />
+            </div>
+            <div style="margin-top:12px">
+              <div class="muted">Taskbar</div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <button onclick="openCameraInMessenger()">Camera</button>
+                <button onclick="openRecorderInMessenger()">Voice</button>
+                <button onclick="openStickers()">Stickers</button>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="muted">Conversation</div>
+            <div id="messages" style="height:150px;overflow:auto;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);margin-top:8px"></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <input id="msgInput" placeholder="Text Message" style="flex:1" />
+              <button class="btn" onclick="sendMessage()">Send</button>
+            </div>
+            <div class="small-note" style="margin-top:8px">Voices: use Text-to-Speech to generate audio messages above.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>Copyright ©2026 LogoRemakeFour. All Rights Reserved.</div>
+      <div style="margin-top:8px"><a href="https://www.google.com" target="_blank" rel="noreferrer" style="color:var(--muted)">Google</a></div>
+    </footer>
+  </main>
+
+  <!-- Twitter widgets -->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  <!-- ResponsiveVoice (text-to-speech) -->
+  <script src="https://code.responsivevoice.org/responsivevoice.js?key="></script>
+
+  <script>
+    // Splash preview control
+    function showSplash(type){
+      const label = document.getElementById('splashLabel');
+      const preview = document.getElementById('splashPreview');
+      label.textContent = type;
+      if(type === 'phone'){
+        preview.innerHTML = '<div style="text-align:center"><img src="https://api.arasaac.org/api/pictograms/5441" width="60" style="border-radius:8px"/><div style="font-weight:700;margin-top:8px">Phone Splash</div><div class="muted">Mobile Loading UI</div></div>';
+      } else if(type === 'pc'){
+        preview.innerHTML = '<div style="text-align:center"><div style="font-size:20px">PC Splash</div><div class="muted">Desktop Loading UI</div></div>';
+      } else {
+        preview.innerHTML = '<div style="text-align:center"><div style="font-weight:700">Tablet Splash</div><div class="muted">Lenovo Tablet: BabyBus Edition • Samsung Tablet</div></div>';
+      }
+    }
+
+    // Login and profile functions
+    function sendVerification(){
+      alert('Verification code sent to ' + document.getElementById('onlineEmail').value + ' (demo)');
+    }
+    function loginOnline(){
+      alert('Logged in online as ' + document.getElementById('onlineUser').value + ' (demo)');
+    }
+    function loginOffline(){
+      alert('Offline login: ' + document.getElementById('offlineUser').value);
+    }
+    function refreshProfile(){
+      location.reload();
+    }
+    function openProfile(){
+      alert('Opening profile (demo)');
+    }
+
+    // Camera & snapshot
+    let cameraStream;
+    async function startCamera(){
+      try{
+        cameraStream = await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+        const video = document.getElementById('cameraPreview');
+        video.srcObject = cameraStream;
+      }catch(e){alert('Camera access denied or not available: ' + e.message)}
+    }
+    function takeSnapshot(){
+      if(!cameraStream){alert('Start camera first');return;}
+      const video = document.getElementById('cameraPreview');
+      const canvas = document.getElementById('snapshotCanvas');
+      canvas.style.display = 'block';
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      // open in new tab
+      window.open(canvas.toDataURL('image/png'));
+    }
+
+    // Audio Recorder
+    let mediaRecorder;
+    let audioChunks = [];
+    let lastAudioBlob;
+    async function startRecording(){
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          lastAudioBlob = new Blob(audioChunks,{type:'audio/webm'});
+          audioChunks = [];
+          const url = URL.createObjectURL(lastAudioBlob);
+          document.getElementById('downloadAudio').href = url;
+          document.getElementById('downloadAudio').download = 'recording.webm';
+          document.getElementById('recStatus').textContent = 'Recording stopped. Ready to play/download.';
+        };
+        mediaRecorder.start();
+        document.getElementById('recStatus').textContent = 'Recording...';
+      } catch(e){ alert('Microphone access denied or not available: ' + e.message) }
+    }
+    function stopRecording(){
+      if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    }
+    function playLastAudio(){
+      if(!lastAudioBlob){alert('No recording available');return;}
+      const url = URL.createObjectURL(lastAudioBlob);
+      const a = new Audio(url);
+      a.play();
+    }
+
+    // Text-to-Speech using ResponsiveVoice
+    function speakText(){
+      const text = document.getElementById('ttsText').value || 'Hello, this is a demo from Collection Tools.';
+      const voice = document.getElementById('ttsVoice').value;
+      if(typeof responsiveVoice !== 'undefined'){
+        responsiveVoice.speak(text, voice);
+      } else {
+        alert('ResponsiveVoice not loaded or blocked by the browser.');
+      }
+    }
+    function stopSpeak(){
+      if(typeof responsiveVoice !== 'undefined') responsiveVoice.cancel();
+    }
+
+    // Messenger
+    function sendMessage(){
+      const text = document.getElementById('msgInput').value;
+      if(!text) return;
+      const msgBox = document.getElementById('messages');
+      const el = document.createElement('div');
+      el.style.marginBottom = '8px';
+      el.innerHTML = '<strong>You:</strong> ' + escapeHtml(text);
+      msgBox.appendChild(el);
+      msgBox.scrollTop = msgBox.scrollHeight;
+      document.getElementById('msgInput').value = '';
+    }
+    function useSticker(src){
+      const msgBox = document.getElementById('messages');
+      const el = document.createElement('div');
+      el.style.marginBottom = '8px';
+      el.innerHTML = '<strong>You:</strong> <img src="'+src+'" style="width:120px;border-radius:8px"/>';
+      msgBox.appendChild(el);
+    }
+    function openCameraInMessenger(){ startCamera(); }
+    function openRecorderInMessenger(){ /* reuse recorder */ }
+    function openStickers(){ alert('Stickers panel (demo)'); }
+
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]}); }
+
+    // Initialize default splash
+    showSplash('pc');
+  </script>
+</body>
+</html>
