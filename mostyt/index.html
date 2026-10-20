@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Top 1000 Most Viewed Videos | YouTube Playlist</title>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="https://code.jquery.com/jquery-3.12.1.min.js"></script>
+  <style>
+    :root {
+      --bg: #fff5f5;
+      --bg-2: #ffe5e5;
+      --panel: rgba(255, 255, 255, 0.8);
+      --panel-strong: rgba(255,255,255,0.95);
+      --text: #1f1b1b;
+      --muted: #6d5b5b;
+      --accent: #ff3b3b;
+      --accent-2: #d91d1d;
+      --accent-soft: rgba(255, 59, 59, 0.12);
+      --card: rgba(255,255,255,0.7);
+      --shadow: rgba(160, 32, 32, 0.2);
+      --success: #1ad07a;
+      --danger: #ff3b3b;
+      --info: #4d8df7;
+      --header-glow: rgba(255, 86, 86, 0.28);
+      --loader: rgba(255, 86, 86, 0.14);
+      --btn-text: #ffffff;
+    }
+
+    body.dark {
+      --bg: #061326;
+      --bg-2: #0d2343;
+      --panel: rgba(15, 23, 42, 0.8);
+      --panel-strong: rgba(13, 20, 35, 0.95);
+      --text: #edf3ff;
+      --muted: #a3b6d9;
+      --accent: #3d7eff;
+      --accent-2: #204fd7;
+      --accent-soft: rgba(61, 126, 255, 0.12);
+      --card: rgba(15, 23, 42, 0.7);
+      --shadow: rgba(17, 47, 112, 0.38);
+      --success: #2dd4bf;
+      --danger: #ff5d7d;
+      --info: #7cc4ff;
+      --header-glow: rgba(61, 126, 255, 0.34);
+      --loader: rgba(61, 126, 255, 0.14);
+      --btn-text: #f5f9ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08)),
+        url("https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1600") center/cover fixed no-repeat,
+        var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255, 92, 92, 0.25), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(60,110,255,0.2), transparent 32%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 24px 18px 60px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      border-radius: 22px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px var(--shadow);
+      border: 1px solid rgba(255,255,255,0.18);
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 10px 30px var(--header-glow);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 999px;
+      padding: 10px 14px;
+      min-width: min(420px, 50vw);
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      width: 100%;
+      font-size: 0.95rem;
+    }
+
+    .search-box input::placeholder { color: var(--muted); }
+
+    .icon-btn, .primary-btn, .ghost-btn {
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .icon-btn:hover, .primary-btn:hover, .ghost-btn:hover { transform: translateY(-1px); }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--btn-text);
+      padding: 12px 18px;
+      border-radius: 12px;
+      box-shadow: 0 18px 40px var(--shadow);
+    }
+
+    .ghost-btn {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 12px 18px;
+      border-radius: 12px;
+    }
+
+    .hero {
+      margin-top: 28px;
+      padding: 30px 22px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 50px var(--shadow);
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 1.1;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero-meta {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 780px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .player-wrap {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 2.4fr) minmax(280px, 0.8fr);
+      gap: 20px;
+    }
+
+    .player-panel, .sidebar-panel {
+      background: var(--panel-strong);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px var(--shadow);
+    }
+
+    .player-shell {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #player {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .player-meta {
+      padding: 18px 18px 14px;
+    }
+
+    .video-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .video-title {
+      font-weight: 800;
+      font-size: clamp(1.05rem, 1.5vw, 1.55rem);
+      line-height: 1.4;
+    }
+
+    .stat-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(255,255,255,0.04);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .sidebar-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .mini-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .payments {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pay-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    .pay-option:hover {
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .price {
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    .locked-box {
+      margin-top: auto;
+      background: rgba(255, 83, 83, 0.08);
+      border: 1px solid rgba(255, 83, 83, 0.2);
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .sections {
+      margin-top: 28px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.2rem, 1.7vw, 1.8rem);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(80px, 1fr));
+      gap: 12px;
+    }
+
+    .video-card {
+      position: relative;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      min-height: 98px;
+      overflow: hidden;
+      padding: 0;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+    }
+
+    .card-thumb {
+      height: 100%;
+      min-height: 98px;
+      background:
+        linear-gradient(180deg, rgba(13, 13, 13, 0.12), rgba(13,13,13,0.4)),
+        url("https://images.pexels.com/photos/2876511/pexels-photo-2876511.jpeg?auto=compress&cs=tinysrgb&w=800") center/cover no-repeat;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 10px;
+      color: white;
+      font-weight: 800;
+      font-size: 0.78rem;
+    }
+
+    .card-thumb::after {
+      content: "▶";
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.24);
+      backdrop-filter: blur(8px);
+      font-size: 0.82rem;
+    }
+
+    .card-title {
+      position: relative;
+      z-index: 1;
+      max-width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: var(--loader);
+    }
+
+    .skeleton::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.32) 50%,
+        transparent 100%
+      );
+      transform: translateX(-100%);
+      animation: shimmer 1.2s infinite;
+    }
+
+    @keyframes shimmer {
+      100% { transform: translateX(100%); }
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.62);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-card {
+      width: min(760px, 100%);
+      background: rgba(14, 19, 30, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      color: white;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+    }
+
+    .payment-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .method {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .method:hover {
+      border-color: rgba(255,255,255,0.18);
+      transform: translateY(-1px);
+    }
+
+    .method.selected {
+      border-color: rgba(97, 177, 255, 0.8);
+      box-shadow: 0 0 0 1px rgba(97,177,255,0.8) inset;
+    }
+
+    .summary-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .summary-box h4 {
+      margin: 0 0 16px;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .pay-form {
+      margin-top: 22px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .pay-form input {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: white;
+      outline: none;
+    }
+
+    .pay-form input::placeholder {
+      color: rgba(255,255,255,0.55);
+    }
+
+    .pay-submit {
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .lock-banner {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255, 129, 75, 0.12);
+      color: #ffd1ad;
+      border: 1px solid rgba(255, 129, 75, 0.2);
+      display: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .lock-banner.visible { display: block; }
+
+    @media (max-width: 1100px) {
+      .player-wrap { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(5, minmax(90px, 1fr)); }
+      .modal-body { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .topbar { flex-wrap: wrap; }
+      .search-box { min-width: 100%; }
+      .grid { grid-template-columns: repeat(3, minmax(90px, 1fr)); }
+      .hero { padding: 20px 16px; }
+      .app { padding-left: 12px; padding-right: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">YT</div>
+        <div>Top 1000 Videos</div>
+      </div>
+
+      <div class="top-actions">
+        <div class="search-box">
+          <span>🔎</span>
+          <input id="ytSearch" type="text" value="PC video tutorials" aria-label="Search YouTube" />
+        </div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="eyebrow">Playlist</div>
+          <h1>Top 1000 Most Viewed Videos <span>on YouTube</span></h1>
+        </div>
+        <button class="primary-btn" id="openPayment">Premium $5,000</button>
+      </div>
+      <div class="hero-meta">
+        Watch videos from the YouTube playlist:
+        <strong>PLNc3mV34rpBmy7pp1sXOR75hQ-PewFsfJ</strong>
+        in a modern 10x10 media grid. This mockup is designed for PC tutorials, premium UI, and video playback.
+      </div>
+
+      <div class="hero-actions">
+        <button class="primary-btn" id="playPlaylistBtn">Play Playlist</button>
+        <button class="ghost-btn" id="searchPlaylistBtn">Search PC Tutorials</button>
+      </div>
+    </section>
+
+    <section class="player-wrap">
+      <div class="player-panel">
+        <div class="player-shell">
+          <div id="player"></div>
+        </div>
+        <div class="player-meta">
+          <div class="video-label">Now playing</div>
+          <div class="video-title" id="videoTitle">Loading playlist...</div>
+          <div class="stat-strip">
+            <span class="chip">Playlist: 1000+</span>
+            <span class="chip">Grid: 10x10</span>
+            <span class="chip">IFrame API</span>
+            <span class="chip">PC Tutorials</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sidebar-panel">
+        <div class="mini-card">
+          <h3>Payment options</h3>
+          <div class="payments">
+            <button class="pay-option" data-method="PayPal">
+              <span>PayPal</span>
+              <span class="price">$5,000</span>
+            </button>
+            <button class="pay-option" data-method="MasterCard">
+              <span>MasterCard</span>
+              <span class="price">$5,000</span>
+            </button>
+            <button class="pay-option" data-method="Visa">
+              <span>Visa</span>
+              <span class="price">$5,000</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <h3>Child lock</h3>
+          <div class="locked-box">
+            Hold <strong>Ctrl + K</strong> for 3 seconds to activate lock.
+          </div>
+          <div class="lock-banner" id="lockBanner">Child lock active. Content protected.</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="sections">
+      <div class="section-head">
+        <h2>Video Grid</h2>
+        <span class="chip">10x10</span>
+      </div>
+
+      <div class="grid" id="videoGrid"></div>
+    </section>
+  </div>
+
+  <div class="modal" id="paymentModal" aria-modal="true" role="dialog">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Premium subscription</h3>
+        <button class="close-btn" id="closePayment">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <div class="payment-list">
+            <button class="method selected" data-method="PayPal">
+              <span>PayPal</span>
+              <span>$5,000</span>
+            </button>
+            <button class="method" data-method="MasterCard">
+              <span>MasterCard</span>
+              <span>$5,000</span>
+            </button>
+            <button class="method" data-method="Visa">
+              <span>Visa</span>
+              <span>$5,000</span>
+            </button>
+          </div>
+
+          <div class="pay-form">
+            <input type="text" placeholder="Cardholder name" />
+            <input type="text" placeholder="Card number" />
+            <input type="text" placeholder="MM/YY" />
+            <input type="password" placeholder="CVV" />
+          </div>
+        </div>
+
+        <div class="summary-box">
+          <h4>Order Summary</h4>
+          <div>Premium access</div>
+          <div>1 user</div>
+          <div>PC tutorial playback</div>
+          <div>Playlist access</div>
+          <div class="total">
+            <span>Total</span>
+            <span>$5,000</span>
+          </div>
+          <button class="primary-btn pay-submit" id="submitPayment">Pay now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PLAYLIST_ID = "PLNc3mV34rpBmy7pp1sXOR75hQ-PewFsfJ";
+    const TOTAL_CARDS = 100;
+
+    let player;
+    let selectedMethod = "PayPal";
+    let lockTimer = null;
+    let lockActive = false;
+
+    function buildGrid() {
+      const grid = document.getElementById("videoGrid");
+      for (let i = 0; i < TOTAL_CARDS; i++) {
+        const card = document.createElement("button");
+        card.className = "video-card";
+        card.setAttribute("type", "button");
+        card.innerHTML = `
+          <div class="card-thumb">
+            <div class="card-title">Video ${i + 1}</div>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          if (player && typeof player.playVideoAt === "function") {
+            player.playVideoAt(i);
+          }
+        }
+    function setTheme(isDark) {
+      document.body.classList.toggle("dark", isDark);
+      const btn = document.getElementById("themeToggle");
+      btn.textContent = isDark ? "☀️" : "🌙";
+    }
+
+    function clearLockTimer() {
+      if (lockTimer) {
+        clearTimeout(lockTimer);
+        lockTimer = null;
+      }
+    }
+
+    function activateChildLock() {
+      lockActive = true;
+      document.getElementById("lockBanner").classList.add("visible");
+      document.body.style.filter = "saturate(0.7) brightness(0.9)";
+    }
+
+    function deactivateChildLock() {
+      lockActive = false;
+      document.getElementById("lockBanner").classList.remove("visible");
+      document.body.style.filter = "";
+    }
+
+    function handleKeyLock(e) {
+      if (e.ctrlKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        clearLockTimer();
+        lockTimer = setTimeout(() => {
+          activateChildLock();
+        }, 3000);
+      }
+
+      if (e.key === "Escape" && lockActive) {
+        deactivateChildLock();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyLock);
+    document.addEventListener("keyup", function (e) {
+      if (e.ctrlKey && e.key.toLowerCase() === "k") {
+        clearLockTimer();
+      }
+    });
+
+    function showPaymentModal() {
+      document.getElementById("paymentModal").classList.add("show");
+    }
+
+    function hidePaymentModal() {
+      document.getElementById("paymentModal").classList.remove("show");
+    }
+
+    document.getElementById("openPayment").addEventListener("click", showPaymentModal);
+    document.getElementById("closePayment").addEventListener("click", hidePaymentModal);
+    document.getElementById("submitPayment").addEventListener("click", function () {
+      alert("Payment successful! Premium access unlocked.");
+      hidePaymentModal();
+    });
+
+    document.querySelectorAll(".pay-option, .method").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        selectedMethod = this.dataset.method;
+        document.querySelectorAll(".pay-option, .method").forEach(el => {
+          el.classList.toggle("selected", el.dataset.method === selectedMethod);
+        });
+      });
+    });
+
+    document.getElementById("themeToggle").addEventListener("click", function () {
+      setTheme(!document.body.classList.contains("dark"));
+    });
+
+    document.getElementById("playPlaylistBtn").addEventListener("click", function () {
+      if (player && typeof player.playVideo === "function") {
+        player.playVideo();
+      }
+    });
+
+    document.getElementById("searchPlaylistBtn").addEventListener("click", function () {
+      const query = document.getElementById("ytSearch").value.trim();
+      const url = "https://www.youtube.com/results?search_query=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    });
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("player", {
+        height: "100%",
+        width: "100%",
+        playerVars: {
+          autoplay: 0,
+          controls: 1,
+          rel: 0,
+          playsinline: 1,
+          origin: window.location.origin
+        },
+        events: {
+          onReady: function () {
+            player.loadPlaylist({
+              listType: "playlist",
+              list: PLAYLIST_ID
+            });
+
+            document.getElementById("videoTitle").textContent = "Playlist ready";
+          },
+          onStateChange: function (event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+              const index = player.getPlaylistIndex();
+              const title = "Video " + (index + 1);
+              document.getElementById("videoTitle").textContent = title;
+            }
+          }
+        }
+      });
+    }
+
+    setTheme(false);
+    buildGrid();
+
+    // skeleton loading effect
+    const gridItems = document.querySelectorAll(".video-card");
+    gridItems.forEach((item, idx) => {
+      setTimeout(() => {
+        item.classList.add("skeleton");
+      }, idx * 20);
+    });
+
+    setTimeout(() => {
+      document.querySelectorAll(".video-card").forEach((item) => item.classList.remove("skeleton"));
+    }, 900);
+  </script>
+</body>
+</html>
