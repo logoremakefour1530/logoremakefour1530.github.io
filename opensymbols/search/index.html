@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenSymbols Search</title>
+  <style>
+    :root {
+      --primary: #1f6feb;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1d1d1f;
+      --muted: #5f6368;
+      --border: #dfe3eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      width: min(760px, 92vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+      padding: 28px 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .brand img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .brand h1 {
+      font-size: clamp(1.5rem, 2vw, 2.2rem);
+      margin: 0;
+    }
+
+    .lang-label {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1 1 420px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.12);
+    }
+
+    button {
+      padding: 16px 22px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      filter: brightness(0.96);
+    }
+
+    .service-info {
+      margin-top: 18px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .service-info a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .service-info a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <img
+        src="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/img/asterics-aac-logo-raw.svg"
+        alt="Logo"
+      />
+      <h1>OpenSymbols Search</h1>
+    </div>
+
+    <div class="lang-label">Language: English (Automatic)</div>
+
+    <form id="searchForm" method="GET">
+      <input
+        type="text"
+        id="query"
+        name="q"
+        placeholder="Search for a pictogram..."
+        aria-label="Search OpenSymbols"
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="service-info">
+      Pictogram service:
+      <a href="https://d18vdu4p71yql0.cloudfront.net" target="_blank" rel="noopener">
+        https://d18vdu4p71yql0.cloudfront.net
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('searchForm');
+    const queryInput = document.getElementById('query');
+
+    const resultsBaseUrl = 'https://logoremakefour1530.github.io/opensymbols/search';
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const query = queryInput.value.trim();
+      if (!query) {
+        queryInput.focus();
+        return;
+      }
+
+      const finalUrl = `${resultsBaseUrl}?q=${encodeURIComponent(query)}`;
+      console.log('OpenSymbols search URL:', finalUrl);
+
+      window.location.href = finalUrl;
+    });
+
+    // Optional: prefill from the current URL if a query is already present
+    const params = new URLSearchParams(window.location.search);
+    const currentQuery = params.get('q');
+    if (currentQuery) {
+      queryInput.value = currentQuery;
+    }
+  </script>
+</body>
+</html>
