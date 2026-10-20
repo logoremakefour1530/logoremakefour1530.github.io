@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AsTeRICS Grid Board Service Demo</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --ink: #1a2433;
+      --muted: #5b6a7a;
+      --primary: #3c7ae0;
+      --primary-dark: #2a5fbb;
+      --border: #dfe8f5;
+      --shadow: 0 8px 24px rgba(24, 48, 86, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .toolbar label {
+      font-weight: 600;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      background: #edf4ff;
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .tab svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .thumb {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      background: #eef2f7;
+      display: block;
+    }
+
+    .content {
+      padding: 14px 14px 16px;
+    }
+
+    .content h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+
+    .content p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      background: #eef5ff;
+      color: var(--primary-dark);
+      border-radius: 999px;
+      padding: 6px 8px;
+      font-weight: 600;
+    }
+
+    .empty {
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar">
+      <label for="langSelect">
+        Language
+        <select id="langSelect">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <option value="ca">Catalan</option>
+        </select>
+      </label>
+
+      <div class="tabs" aria-label="Board type selector">
+        <button class="tab active" data-type="communicator">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path fill="currentColor" d="M16 14h10v10H16zm22 0h10v10H38zM16 28h10v10H16zm22 0h10v10H38zm-18 18h14v10H22zm18-10h16v10H40z"/>
+            <path fill="currentColor" d="M52 14l-8 8 3 3 8-8zm-36 0l-8 8 3 3 8-8zM22 44h20v4H22zm-5 0h4v4h-4zm24 0h4v4h-4z"/>
+          </svg>
+          Communicator (automatic)
+        </button>
+
+        <button class="tab" data-type="board">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path fill="currentColor" d="M12 15h40v34H12zm6 6h28v22H18zm8 4v14h12V25zm-2-8h16v4H24zm-10 4h4v4h-4zm0 8h4v4h-4zm0 8h4v4h-4zm30-16h4v4h-4zm0 8h4v4h-4zm0 8h4v4h-4z"/>
+          </svg>
+          Board
+        </button>
+      </div>
+    </div>
+
+    <div id="results" class="grid"></div>
+  </div>
+
+  <script type="module">
+    import { boardService } from 'https://grid.asterics.eu/src/js/service/boards/boardService.js';
+    import { constants } from 'https://grid.asterics.eu/src/js/util/constants.js';
+
+    const langSelect = document.getElementById('langSelect');
+    const resultNode = document.getElementById('results');
+
+    const state = {
+      lang: 'en',
+      type: 'communicator'
+    };
+
+    function hammerIcon() {
+      return `
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path fill="currentColor" d="M42 10l5-5 8 8-5 5-8-8zm-10 12L18 46l6 6 14-14 10 10 6-6-10-10 9-9-6-6-9 9-6-6-6 6zm-7 7l-8 8 4 4 8-8-4-4z"/>
+        </svg>
+      `;
+    }
+
+    function typeToBoardType(type) {
+      return type === 'board'
+        ? constants.BOARD_TYPE_SINGLE
+        : constants.BOARD_TYPE_SELFCONTAINED;
+    }
+
+    function renderBoard(board) {
+      const thumb = board.thumbnail || (board.images && board.images[0]) || '';
+      const description = board.description || '';
+      const name = board.name || 'Untitled board';
+
+      return `
+        <article class="card">
+          ${thumb ? `<img class="thumb" src="${thumb}" alt="${name}" />` : ''}
+          <div class="content">
+            <h3>${name}</h3>
+            <p>${description}</p>
+            <div class="meta">
+              <span class="badge">${board.languages?.join(', ') || '—'}</span>
+              ${board.selfContained ? '<span class="badge">Self-contained</span>' : '<span class="badge">Single board</span>'}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function loadBoards() {
+      try {
+        const boards = await boardService.query('', {
+          lang: state.lang,
+          type: typeToBoardType(state.type)
+        });
+
+        console.log('boardService.query result:', {
+          lang: state.lang,
+          type: state.type,
+          boardType: typeToBoardType(state.type),
+          count: boards.length
+        }, boards);
+
+        if (!boards.length) {
+          resultNode.innerHTML = '<div class="empty">No boards found for this language/type.</div>';
+          return;
+        }
+
+        resultNode.innerHTML = boards.map(renderBoard).join('');
+      } catch (error) {
+        console.error('Board service failed:', error);
+        resultNode.innerHTML = `<div class="empty">Error loading boards: ${error.message}</div>`;
+      }
+    }
+
+    langSelect.addEventListener('change', (event) => {
+      state.lang = event.target.value;
+      loadBoards();
+    });
+
+    document.querySelectorAll('.tab').forEach((button) => {
+      button.addEventListener('click', () => {
+        state.type = button.dataset.type;
+        document.querySelectorAll('.tab').forEach((tab) => tab.classList.toggle('active', tab === button));
+        loadBoards();
+      });
+    });
+
+    // Log the service itself for debugging
+    console.log('boardService loaded:', boardService);
+
+    // Optional: show the hammer icon in the UI, as requested
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.insertAdjacentHTML('afterend', '');
+    });
+
+    loadBoards();
+  </script>
+</body>
+</html>
