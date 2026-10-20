@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AsTeRICS Grid</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --primary: #2c7be5;
+      --primary-dark: #205bb5;
+      --accent: #ffbf47;
+      --tile-1: #e0f2fe;
+      --tile-2: #dcfce7;
+      --tile-3: #fef3c7;
+      --tile-4: #fce7f3;
+      --tile-5: #ede9fe;
+      --tile-6: #fee2e2;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --shadow: 0 10px 24px rgba(31, 41, 55, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #eef5ff, #f7f8fd);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--panel);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 16px 20px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 700;
+      font-size: 1.35rem;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .menu {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      background: #edf2ff;
+      color: var(--primary-dark);
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .composer {
+      background: var(--panel);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+
+    .display {
+      min-height: 80px;
+      background: #f8fafc;
+      border: 2px solid #dfe7f5;
+      border-radius: 14px;
+      font-size: clamp(1.2rem, 2vw, 2rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      word-break: break-word;
+      margin-bottom: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #eef2ff;
+      color: var(--primary-dark);
+    }
+
+    .action-btn.primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .action-btn.warn {
+      background: #fff1cc;
+      color: #7a5200;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 18px;
+    }
+
+    .tile {
+      position: relative;
+      border: none;
+      border-radius: 22px;
+      min-height: 150px;
+      padding: 16px 12px;
+      background: var(--tile-color, var(--tile-1));
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(31, 41, 55, 0.16);
+    }
+
+    .tile .emoji {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .tile .label {
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    .tile.small {
+      min-height: 110px;
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">A</div>
+        <span>AsTeRICS Grid</span>
+      </div>
+      <div class="menu">
+        <button class="chip" type="button">Home</button>
+        <button class="chip" type="button">Words</button>
+        <button class="chip" type="button">Phrases</button>
+      </div>
+    </header>
+
+    <section class="composer">
+      <div id="display" class="display">Hello!</div>
+      <div class="actions">
+        <button class="action-btn primary" id="speakBtn" type="button">Speak</button>
+        <button class="action-btn" id="clearBtn" type="button">Clear</button>
+        <button class="action-btn warn" id="backspaceBtn" type="button">Delete</button>
+      </div>
+    </section>
+
+    <section id="grid" class="grid" aria-label="AAC grid"></section>
+  </div>
+
+  <script>
+    const gridData = [
+      { label: 'Hello', emoji: '👋', color: '#e0f2fe' },
+      { label: 'Thank you', emoji: '🙏', color: '#dcfce7' },
+      { label: 'I want', emoji: '🗣️', color: '#fef3c7' },
+      { label: 'Please', emoji: '😊', color: '#fce7f3' },
+
+      { label: 'Drink', emoji: '🥤', color: '#ede9fe' },
+      { label: 'Eat', emoji: '🍽️', color: '#fee2e2' },
+      { label: 'Bathroom', emoji: '🚻', color: '#e0f2fe' },
+      { label: 'Help', emoji: '🆘', color: '#fef3c7' },
+
+      { label: 'School', emoji: '🎒', color: '#dcfce7' },
+      { label: 'Family', emoji: '👨‍👩‍👧‍👦', color: '#fce7f3' },
+      { label: 'Play', emoji: '🎮', color: '#ede9fe' },
+      { label: 'Sleep', emoji: '😴', color: '#fee2e2' },
+
+      { label: 'Yes', emoji: '✅', color: '#d1fae5' },
+      { label: 'No', emoji: '❌', color: '#fee2e2' },
+      { label: 'My name is', emoji: '🧑', color: '#e0f2fe' },
+      { label: 'I need', emoji: '🛒', color: '#f1f5f9' }
+    ];
+
+    const grid = document.getElementById('grid');
+    const display = document.getElementById('display');
+
+    function renderGrid() {
+      grid.innerHTML = '';
+      gridData.forEach(item => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'tile';
+        button.style.setProperty('--tile-color', item.color);
+        button.setAttribute('aria-label', item.label);
+
+        button.innerHTML = `
+          <span class="emoji">${item.emoji}</span>
+          <span class="label">${item.label}</span>
+        `;
+
+        button.addEventListener('click', () => {
+          const current = display.textContent.trim();
+          const text = current === 'Hello!' ? '' : current;
+          display.textContent = (text + ' ' + item.label).trim();
+        });
+
+        grid.appendChild(button);
+      });
+    }
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      display.textContent = '';
+    });
+
+    document.getElementById('backspaceBtn').addEventListener('click', () => {
+      let text = display.textContent.trim();
+      display.textContent = text.length > 0 ? text.slice(0, -1) : '';
+    });
+
+    document.getElementById('speakBtn').addEventListener('click', () => {
+      const text = display.textContent.trim();
+      if (!text) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    });
+
+    renderGrid();
+  </script>
+</body>
+</html>
