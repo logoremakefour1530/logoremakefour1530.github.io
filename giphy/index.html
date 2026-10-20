@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top 1000 Giphy GIFs</title>
+  <meta name="google-site-verification" content="UC28sjo828jaop90p" />
+  <meta name="description" content="Top 1000 Giphy GIFs" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #131b2d;
+      --text: #edf2ff;
+      --muted: #aeb9d6;
+      --accent: #7c9cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1020, #111827);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 30px 18px 60px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: clamp(2rem, 4vw, 4rem);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 28px;
+      font-size: 1rem;
+    }
+
+    .gif-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .gif-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 26px rgba(0,0,0,0.22);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .gif-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124, 156, 255, 0.8);
+    }
+
+    .gif-card iframe {
+      display: block;
+      width: 100%;
+      height: 200px;
+      border: 0;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Top 1000 Giphy GIFs</h1>
+    <div class="subtitle">Giphy iframe embed gallery</div>
+
+    <div id="gifGrid" class="gif-grid" aria-label="Top 1000 Giphy GIFs"></div>
+  </div>
+
+  <script>
+    const gifPool = [
+      "https://giphy.com/embed/3o7TKtnuHOHHUjR38Y",
+      "https://giphy.com/embed/26BRv0ThflsHCX4sU",
+      "https://giphy.com/embed/l0MYt5jPR6QX5pnqM",
+      "https://giphy.com/embed/3oEjI6SIIHBdRxXI40",
+      "https://giphy.com/embed/13HgwGsXF0aiGY",
+      "https://giphy.com/embed/5GoVLqeAOo6PK",
+      "https://giphy.com/embed/3o6fJbbrsZ2VSW5k1i",
+      "https://giphy.com/embed/26ufdipQqU2lhNA4g",
+      "https://giphy.com/embed/11sBLVxNs7v6WA",
+      "https://giphy.com/embed/8v59Tl5B8B5ltT6g3j",
+      "https://giphy.com/embed/12NUbkX6p4xOO4",
+      "https://giphy.com/embed/1oF9tV8Xa6x9C",
+      "https://giphy.com/embed/3o6ZtpxSZbQRRnwCKQ",
+      "https://giphy.com/embed/26tPplGWjN0xLybiU",
+      "https://giphy.com/embed/3oFzmkkxQ0J2RHuQG4",
+      "https://giphy.com/embed/3o7abBphHJngINCHio",
+      "https://giphy.com/embed/26BRrSv13DqQ0dH0Y",
+      "https://giphy.com/embed/l0HlQf0pUeWf0LeJ2",
+      "https://giphy.com/embed/2xHqDvF0y3iTuoA84E",
+      "https://giphy.com/embed/5fBH6zoAQg9d4Y"
+    ];
+
+    const grid = document.getElementById("gifGrid");
+
+    for (let i = 1; i <= 1000; i++) {
+      const card = document.createElement("div");
+      card.className = "gif-card";
+
+      const iframe = document.createElement("iframe");
+      iframe.src = gifPool[(i - 1) % gifPool.length];
+      iframe.title = "Giphy GIF " + i;
+      iframe.loading = "lazy";
+      iframe.allow = "autoplay; fullscreen";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.setAttribute("allowfullscreen", "true");
+
+      card.appendChild(iframe);
+      grid.appendChild(card);
+    }
+  </script>
+</body>
+</html>
