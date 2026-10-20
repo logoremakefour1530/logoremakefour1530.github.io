@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogoRemakeFour Danmaku Video</title>
+
+  <!-- DPlayer CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css" />
+
+  <style>
+    :root {
+      --bg-dark: #111111;
+      --bg-soft: #1b1b1b;
+      --accent: #fadfa3;
+      --text: #f5f5f5;
+      --muted: #d7d7d7;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #111 0%, #1d1d1d 100%);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrap {
+      width: min(100%, 1100px);
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: clamp(1.5rem, 2vw, 2.4rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(250, 223, 163, 0.55);
+    }
+
+    .player-shell {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(250,223,163,0.25);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+    }
+
+    #dplayer {
+      width: 100%;
+      height: 620px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      background: var(--accent);
+      color: #111;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 0 15px rgba(250, 223, 163, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 760px) {
+      #dplayer {
+        height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title">LogoRemakeFour</div>
+
+    <div class="player-shell">
+      <div id="dplayer"></div>
+    </div>
+
+    <div class="controls">
+      <button id="sendDanmaku">Send English Danmaku</button>
+    </div>
+  </div>
+
+  <!-- DPlayer JS -->
+  <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+
+  <script>
+    const dp = new DPlayer({
+      container: document.getElementById('dplayer'),
+      autoplay: false,
+      theme: '#FADFA3',
+      loop: false,
+      lang: 'en',
+      screenshot: false,
+      hotkey: true,
+      preload: 'auto',
+      chromecast: false,
+      airplay: false,
+      logo: 'https://logoremakefour1530.github.io/logo.png',
+      volume: 0.7,
+      mutex: true,
+      video: {
+        url: 'https://logoremakefour1530.github.io/km_Template 20260917_720p_60f_20260917_182813.mp4',
+        pic: 'https://logoremakefour1530.github.io/kmc_20260917_182716.png',
+        thumbnails: 'https://logoremakefour1530.github.io/kmc_20260917_182716.png',
+        type: 'auto'
+      },
+      danmaku: {
+        id: 'logoremakefour-danmaku-001',
+        api: 'https://api.prprpr.me/dplayer/',
+        bottom: '5%',
+        maximum: 200,
+        addition: []
+      }
+    });
+
+    document.getElementById('sendDanmaku').addEventListener('click', () => {
+      if (dp && dp.danmaku) {
+        dp.danmaku.send({
+          text: 'Supermarket La Colchagüina - Breaking Bad Intro',
+          color: '#FADFA3',
+          type: 0
+        });
+      }
+    });
+  </script>
+</body>
+</html>
