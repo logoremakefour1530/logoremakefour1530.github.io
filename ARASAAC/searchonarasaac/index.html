@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARASAAC Search</title>
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --panel: #ffffff;
+      --border: #dfe6ee;
+      --text: #1d2a36;
+      --muted: #5d6b7a;
+      --brand: #2d77d6;
+      --brand-dark: #1f5eb8;
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 0 24px;
+    }
+
+    .topbar img {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      object-fit: contain;
+      padding: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.2;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 200px auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input, select, button {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      padding: 0 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(45,119,214,0.12);
+    }
+
+    button {
+      background: var(--brand);
+      color: white;
+      border: 0;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--brand-dark);
+    }
+
+    .status {
+      margin-top: 16px;
+      min-height: 24px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .results {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+    }
+
+    .card img {
+      width: 100%;
+      max-width: 140px;
+      height: 120px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 10px;
+      border-radius: 10px;
+      background: #f6f8fb;
+    }
+
+    .card figcaption {
+      font-size: 0.9rem;
+      color: var(--muted);
+      word-break: break-word;
+      min-height: 42px;
+    }
+
+    .empty {
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    @media (max-width: 700px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <img src="https://logoremakefour1530.github.io/AsTeRICS-Grid/app/img/arasaac.png" alt="ARASAAC Logo" />
+      <h1>ARASAAC Search</h1>
+    </div>
+
+    <div class="panel">
+      <form id="searchForm">
+        <input
+          id="queryInput"
+          type="text"
+          placeholder="Search pictograms..."
+          aria-label="Search pictograms"
+        />
+
+        <select id="langSelect" aria-label="Language">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="de">Deutsch</option>
+          <option value="pt">Português</option>
+          <option value="ru">Русский</option>
+          <option value="nl">Nederlands</option>
+          <option value="wo">Wolof</option>
+        </select>
+
+        <button type="submit">Search</button>
+      </form>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <div id="results" class="results" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const BASE_URL = "https://logoremakefour1530.github.io/ARASAAC/searchonarasaac";
+    const form = document.getElementById("searchForm");
+    const queryInput = document.getElementById("queryInput");
+    const langSelect = document.getElementById("langSelect");
+    const results = document.getElementById("results");
+    const status = document.getElementById("status");
+
+    function detectDefaultLanguage() {
+      const navLang = (navigator.language || navigator.languages?.[0] || "en").toLowerCase();
+      const short = navLang.split("-")[0];
+      const map = {
+        en: "en",
+        es: "es",
+        de: "de",
+        pt: "pt",
+        ru: "ru",
+        nl: "nl",
+        wo: "wo"
+      };
+      return map[short] || "en";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getResultImageUrl(id) {
+      return `https://api.arasaac.org/api/pictograms/${id}?download=false&plural=false&color=true`;
+    }
+
+    function renderResults(items) {
+      if (!items || !items.length) {
+        results.innerHTML = '<div class="empty">No results found.</div>';
+        return;
+      }
+
+      results.innerHTML = items.map((item) => {
+        const id = item && (item._id || item.id);
+        const imageUrl = id ? getResultImageUrl(id) : "";
+        const text = (
+          (item && item.keywords && item.keywords[0] && item.keywords[0].keyword) ||
+          (item && item.keyword) ||
+          (item && item.text) ||
+          "ARASAAC"
+        );
+
+        return `
+          <figure class="card">
+            <img src="${imageUrl}" alt="${escapeHtml(text)}" loading="lazy" />
+            <figcaption>${escapeHtml(text)}</figcaption>
+          </figure>
+        `;
+      }).join("");
+    }
+
+    async function searchPictograms(query, lang) {
+      const cleanQuery = query.trim();
+      if (!cleanQuery) {
+        status.textContent = "Please enter a search term.";
+        results.innerHTML = "";
+        return;
+      }
+
+      status.textContent = "Searching...";
+      results.innerHTML = "";
+
+      const url = `https://api.arasaac.org/api/pictograms/${lang}/search/${encodeURIComponent(cleanQuery)}`;
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const items = Array.isArray(data) ? data : [];
+        renderResults(items);
+
+        if (items.length === 0) {
+          status.textContent = `No pictograms found for "${cleanQuery}" in ${lang}.`;
+          return;
+        }
+
+        status.textContent = `${items.length} pictogram(s) found for "${cleanQuery}".`;
+      } catch (error) {
+        status.textContent = "Search failed. Please try again.";
+        console.error(error);
+      }
+    }
+
+    function syncQueryFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const query = params.get("q") || "";
+      const lang = params.get("lang") || detectDefaultLanguage();
+
+      langSelect.value = lang;
+      queryInput.value = query;
+
+      if (query) {
+        searchPictograms(query, lang);
+      } else {
+        results.innerHTML = "";
+        status.textContent = "Type one word or phrase to search ARASAAC.";
+      }
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const query = queryInput.value.trim();
+      const lang = langSelect.value;
+
+      const params = new URLSearchParams();
+      if (query) params.set("q", query);
+      params.set("lang", lang);
+
+      const nextUrl = `${BASE_URL}?${params.toString()}`;
+      window.history.replaceState({}, "", nextUrl);
+
+      searchPictograms(query, lang);
+    });
+
+    langSelect.addEventListener("change", function () {
+      const query = queryInput.value.trim();
+      if (!query) return;
+
+      const params = new URLSearchParams();
+      params.set("q", query);
+      params.set("lang", langSelect.value);
+
+      const nextUrl = `${BASE_URL}?${params.toString()}`;
+      window.history.replaceState({}, "", nextUrl);
+
+      searchPictograms(query, langSelect.value);
+    });
+
+    syncQueryFromUrl();
+  </script>
+</body>
+</html>
