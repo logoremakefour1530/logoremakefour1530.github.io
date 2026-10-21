@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML Collections</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#111827;
+      --card:#1f2937;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --theme:#3b82f6;
+      --theme2:#8b5cf6;
+      --green:#22c55e;
+      --gold:#fbbf24;
+      --red:#ef4444;
+      --shadow: 0 18px 45px rgba(0,0,0,.32);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:linear-gradient(180deg,#091221,#0f172a 35%,#111827); color:var(--text); }
+    body{ padding:24px; }
+    a{ color:#7dd3fc; text-decoration:none; }
+    .container{ max-width:1500px; margin:0 auto; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 20px; margin-bottom:24px;
+      background:rgba(15,23,42,.78); border:1px solid rgba(148,163,184,.18); border-radius:18px; box-shadow:var(--shadow);
+    }
+    .logo{
+      display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.04em;
+    }
+    .logo-mark{
+      width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg,var(--theme),var(--theme2)); box-shadow:0 10px 22px rgba(59,130,246,.5);
+      font-size:1.2rem; font-weight:900;
+    }
+    .nav{
+      display:flex; flex-wrap:wrap; gap:10px; font-size:.9rem; color:var(--muted);
+    }
+    .nav span{ padding:8px 12px; border-radius:999px; background:rgba(148,163,184,.08); }
+    .card{
+      background:rgba(17,24,39,.9); border:1px solid rgba(148,163,184,.18); border-radius:20px; padding:20px; box-shadow:var(--shadow); margin-bottom:22px;
+    }
+    h2{
+      margin:0 0 18px; font-size:1.38rem; letter-spacing:.02em;
+    }
+    .grid{
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px;
+    }
+    .embed-card{
+      background:rgba(15,23,42,.75); border:1px solid rgba(148,163,184,.14); border-radius:16px; overflow:hidden; min-height:220px;
+    }
+    .embed-card iframe{
+      width:100%; height:220px; border:0; display:block; background:#000;
+    }
+    .embed-card .label{
+      padding:10px 12px; background:rgba(15,23,42,.9); color:var(--muted); font-size:.82rem; border-top:1px solid rgba(148,163,184,.15);
+    }
+    .two-col{
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:18px;
+    }
+    form{
+      display:grid; gap:12px;
+    }
+    .form-group{
+      display:grid; gap:6px;
+    }
+    label{
+      font-size:.8rem; color:var(--muted); letter-spacing:.02em;
+    }
+    input, select, button, textarea{
+      width:100%; border:1px solid rgba(148,163,184,.2); border-radius:12px; background:rgba(15,23,42,.9); color:var(--text); padding:12px 14px; font:inherit;
+    }
+    textarea{ min-height:78px; resize:vertical; }
+    button{
+      cursor:pointer; border:none; background:linear-gradient(135deg,var(--theme),var(--theme2)); font-weight:700; transition:.2s ease; box-shadow:0 10px 25px rgba(59,130,246,.25);
+    }
+    button:hover{ transform:translateY(-1px); }
+    .small-btn{
+      background:rgba(148,163,184,.12); border:1px solid rgba(148,163,184,.18); color:var(--text); font-weight:600; box-shadow:none;
+    }
+    .captcha{
+      padding:12px; border-radius:12px; border:1px dashed rgba(34,197,94,.5); background:rgba(34,197,94,.06); color:#bbf7d0; display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:.9rem;
+    }
+    .captcha .icon{ font-size:1.2rem; }
+    .messenger{
+      display:grid; grid-template-columns:320px minmax(320px,1fr); gap:18px; min-height:500px;
+    }
+    .sidebar{
+      background:rgba(15,23,42,.72); border:1px solid rgba(148,163,184,.14); border-radius:18px; padding:14px;
+    }
+    .contact{
+      display:flex; align-items:center; justify-content:space-between; padding:12px 10px; border-radius:12px; margin-bottom:10px; background:rgba(148,163,184,.06); border:1px solid rgba(148,163,184,.12);
+    }
+    .contact .avatar{
+      width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg,#f59e0b,#ef4444);
+      font-weight:700; color:#fff;
+    }
+    .chat{
+      display:grid; grid-template-rows:auto 1fr auto auto; gap:10px; background:rgba(15,23,42,.75); border:1px solid rgba(148,163,184,.14); border-radius:18px; overflow:hidden;
+    }
+    .chat-head{
+      display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background:rgba(59,130,246,.08); border-bottom:1px solid rgba(148,163,184,.12);
+    }
+    .chat-body{
+      padding:16px; display:flex; flex-direction:column; gap:12px; max-height:300px; overflow:auto;
+    }
+    .bubble{
+      max-width:78%; padding:10px 12px; border-radius:14px; line-height:1.4; font-size:.95rem;
+    }
+    .bubble.me{
+      align-self:flex-end; background:linear-gradient(135deg,#3b82f6,#8b5cf6); border-bottom-right-radius:6px;
+    }
+    .bubble.other{
+      align-self:flex-start; background:rgba(148,163,184,.14); border-bottom-left-radius:6px;
+    }
+    .toolbar{
+      display:flex; flex-wrap:wrap; gap:8px; padding:10px 14px; border-top:1px solid rgba(148,163,184,.12);
+    }
+    .toolbar button{ width:auto; min-width:44px; padding:9px 11px; }
+    .composer{
+      display:flex; gap:8px; padding:10px 14px 14px; border-top:1px solid rgba(148,163,184,.12);
+    }
+    .composer input{ flex:1; }
+    .quick-icons{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;
+    }
+    .pill{
+      background:rgba(148,163,184,.08); border:1px solid rgba(148,163,184,.14); border-radius:999px; padding:7px 10px; font-size:.8rem; color:var(--text);
+    }
+    .search-box{
+      display:flex; gap:8px; margin-bottom:14px;
+    }
+    .tabs{
+      display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 14px;
+    }
+    .tab{
+      background:rgba(148,163,184,.08); border:1px solid rgba(148,163,184,.16); border-radius:999px; color:var(--text); padding:8px 10px; font-size:.8rem;
+    }
+    .tab.active{ background:linear-gradient(135deg,var(--theme),var(--theme2)); border:none; }
+    .results{
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;
+    }
+    .result{
+      background:rgba(15,23,42,.75); border:1px solid rgba(148,163,184,.14); border-radius:14px; overflow:hidden;
+    }
+    .result img{
+      display:block; width:100%; height:120px; object-fit:cover; background:#0b1220;
+    }
+    .result .meta{
+      padding:10px; font-size:.82rem; color:var(--muted);
+    }
+    .profile-panel{
+      display:grid; grid-template-columns:260px 1fr; gap:18px; align-items:start;
+    }
+    .profile-card{
+      background:rgba(15,23,42,.72); border:1px solid rgba(148,163,184,.14); border-radius:18px; overflow:hidden;
+    }
+    .profile-card .hero{
+      height:150px; background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+      position:relative;
+    }
+    .profile-card .avatar{
+      width:110px; height:110px; border-radius:50%; border:4px solid rgba(255,255,255,.7); background:linear-gradient(135deg,#f59e0b,#ef4444); display:grid; place-items:center; font-size:2rem; font-weight:900; position:absolute; left:50%; bottom:-52px; transform:translateX(-50%);
+      box-shadow:0 18px 30px rgba(0,0,0,.35);
+    }
+    .profile-body{
+      padding:72px 18px 18px; text-align:center;
+    }
+    .profile-actions{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px;
+    }
+    .tiny{
+      font-size:.8rem; color:var(--muted);
+    }
+    .rewards{
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px;
+    }
+    .reward{
+      background:rgba(15,23,42,.72); border:1px solid rgba(148,163,184,.14); border-radius:16px; padding:16px;
+      text-align:center;
+    }
+    .reward .emoji{ font-size:2rem; }
+    .reward strong{ display:block; margin-top:6px; font-size:1.2rem; }
+    .media-stage{
+      background:rgba(15,23,42,.72); border:1px solid rgba(148,163,184,.14); border-radius:16px; overflow:hidden;
+    }
+    #dplayer{
+      width:100%; min-height:420px; background:#000;
+    }
+    .ad-box{
+      padding:18px 16px; border-radius:14px; background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(59,130,246,.12)); border:1px solid rgba(251,191,36,.3); color:var(--text);
+    }
+    .status{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:rgba(34,197,94,.12); color:#bbf7d0; border:1px solid rgba(34,197,94,.25);
+      font-size:.8rem; margin-bottom:8px;
+    }
+    .hidden{ display:none !important; }
+    @media (max-width: 900px){
+      .messenger{ grid-template-columns:1fr; }
+      .profile-panel{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-mark">LRF</div>
+        <span>LogoRemakeFour</span>
+      </div>
+      <div class="nav">
+        <span>Login 🪙 20</span>
+        <span>PC</span>
+        <span>Cash 💵</span>
+        <span>Coins 🪙</span>
+        <span>Gems 💎</span>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2>Social & Media Embeds</h2>
+      <div class="grid">
+        <div class="embed-card">
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube" allowfullscreen></iframe>
+          <div class="label">YouTube</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FMeta%2Fposts%2F10158208285500116&show_text=true&width=500" title="Facebook"></iframe>
+          <div class="label">Facebook</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://grid.asterics.eu" title="Asterics AAC"></iframe>
+          <div class="label">Asterics AAC</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://scratch.mit.edu/projects/1263928291/embed" title="Scratch" allowfullscreen></iframe>
+          <div class="label">Scratch</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://player.twitch.tv/?channel=monstercat&parent=localhost" title="Twitch" allowfullscreen></iframe>
+          <div class="label">Twitch</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://www.dailymotion.com/embed/video/x8o2b2g" title="Dailymotion" allowfullscreen></iframe>
+          <div class="label">Dailymotion</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://www.instagram.com/reel/Ck4X0G0E4m1/embed" title="Instagram"></iframe>
+          <div class="label">Instagram</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://www.tiktok.com/embed/v2/6860313546525013765" title="TikTok"></iframe>
+          <div class="label">TikTok</div>
+        </div>
+
+        <div class="embed-card">
+          <iframe src="https://giphy.com/embed/3ohhwf2XRs0xF4W3f2" title="Giphy" allowfullscreen></iframe>
+          <div class="label">Giphy</div>
+        </div>
+
+        <div class="embed-card">
+          <div style="padding:18px; background:linear-gradient(135deg,#0b1220,#111827); height:220px; display:flex; flex-direction:column; justify-content:center; gap:12px;">
+            <div class="captcha"><span class="icon">✓</span><span>reCAPTCHA Verified</span></div>
+            <div class="captcha"><span class="icon">🛡️</span><span>Cloudflare reCAPTCHA Ready</span></div>
+            <div class="captcha"><span class="icon">◌</span><span>Yandex reCAPTCHA Demo</span></div>
+          </div>
+          <div class="label">reCAPTCHA / Cloudflare / Yandex</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Login & Register</h2>
+      <div class="two-col">
+        <form id="loginForm">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" value="USERNAME_EMAIL@logoremakefour.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" value="Password123" />
+          </div>
+          <div class="captcha">
+            <span class="icon">🧩</span>
+            <span>Cloudflare reCAPTCHA verification required</span>
+          </div>
+          <button type="button" onclick="alert('Login demo submitted')">Login</button>
+        </form>
+
+        <form id="registerForm">
+          <div class="form-group">
+            <label>Email (Username)</label>
+            <input type="email" value="USERNAME_EMAIL@logoremakefour.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" value="Password123" />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" value="+1 728-285-1908" />
+          </div>
+          <div class="form-group">
+            <label>Verification code</label>
+            <input type="text" value="****" />
+          </div>
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" value="FirstName" />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" value="LastName" />
+          </div>
+          <div class="form-group">
+            <label>Confirm Email</label>
+            <input type="email" value="USERNAME_EMAIL@logoremakefour.com" />
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+              <select aria-label="day">
+                <option>Day</option>
+                <option selected>15</option>
+                <option>23</option>
+                <option>30</option>
+              </select>
+              <select aria-label="month">
+                <option>Month</option>
+                <option selected>January</option>
+                <option>June</option>
+                <option>December</option>
+              </select>
+              <select aria-label="year">
+                <option>Year</option>
+                <option selected>2001</option>
+                <option>2003</option>
+                <option>2010</option>
+              </select>
+            </div>
+          </div>
+          <div class="captcha">
+            <span class="icon">⚡</span>
+            <span>Verification Cloudflare reCAPTCHA</span>
+          </div>
+          <button type="button" onclick="alert('Registration demo submitted')">Register</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Messenger</h2>
+      <div class="messenger">
+        <div class="sidebar">
+          <div class="search-box">
+            <input type="text" value="Search contacts" aria-label="Search contacts" />
+            <button class="small-btn" type="button">Go</button>
+          </div>
+          <div class="contact">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="avatar">A</div>
+              <div>
+                <strong>Andy</strong><br>
+                <span class="tiny">Online</span>
+              </div>
+            </div>
+            <span class="tiny">2m</span>
+          </div>
+          <div class="contact">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="avatar" style="background:linear-gradient(135deg,#22c55e,#16a34a)">L</div>
+              <div>
+                <strong>Logan</strong><br>
+                <span class="tiny">Typing…</span>
+              </div>
+            </div>
+            <span class="tiny">Now</span>
+          </div>
+          <div class="contact">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="avatar" style="background:linear-gradient(135deg,#f472b6,#a855f7)">R</div>
+              <div>
+                <strong>Rina</strong><br>
+                <span class="tiny">Shared photo</span>
+              </div>
+            </div>
+            <span class="tiny">1h</span>
+          </div>
+          <div class="quick-icons">
+            <span class="pill">💬 Text</span>
+            <span class="pill">🎧 Voice</span>
+            <span class="pill">🧩 Stickers</span>
+            <span class="pill">⚡ GIF</span>
+            <span class="pill">📷 Photos</span>
+            <span class="pill">🎥 Video</span>
+            <span class="pill">📹 Camera</span>
+          </div>
+        </div>
+
+        <div class="chat">
+          <div class="chat-head">
+            <div><strong>Messenger</strong><div class="tiny">Taskbar • stickers • GIF • camera</div></div>
+            <div class="tiny">Online</div>
+          </div>
+          <div class="chat-body" id="chatBody">
+            <div class="bubble other">Hello! Want to send a message, sticker, GIF, or voice note?</div>
+            <div class="bubble me">Sure! I can do text, stickers, photos, videos, and camera.</div>
+            <div class="bubble other">Great. You can also record with microphone and download the audio.</div>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="small-btn" title="Text">💬</button>
+            <button type="button" class="small-btn" title="Sticker">🎁</button>
+            <button type="button" class="small-btn" title="GIF">⚡</button>
+            <button type="button" class="small-btn" title="Record Voice">🎙️</button>
+            <button type="button" class="small-btn" title="Photos">🖼️</button>
+            <button type="button" class="small-btn" title="Videos">🎥</button>
+            <button type="button" class="small-btn" title="Camera">📷</button>
+          </div>
+          <div class="composer">
+            <input id="chatInput" type="text" value="Type a message..." />
+            <button type="button" id="sendBtn">Send</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Text to Speech (Responsive Voice)</h2>
+      <div class="two-col">
+        <div>
+          <div class="form-group">
+            <label>Language</label>
+            <select id="ttsLanguage">
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+              <option value="German">German</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Voice</label>
+            <select id="ttsVoice">
+              <option value="UK English Male">English Male</option>
+              <option value="US English Female">English Female</option>
+              <option value="Spanish Female">Spanish Female</option>
+              <option value="Deutsch Male">German Male</option>
+              <option value="Google Voice">Google Voice</option>
+              <option value="Microsoft Voice">Microsoft Voice</option>
+              <option value="Apple Voice">Apple Voice</option>
+              <option value="Samsung Voice">Samsung Voice</option>
+              <option value="Weibo Voice">Weibo Voice</option>
+              <option value="Talking Tom Voice">Talking Tom Voice (Outfit7)</option>
+              <option value="Talking Angela Voice">Talking Angela Voice (Outfit7)</option>
+              <option value="Elmo Voice">Sesame Street Elmo Voice</option>
+              <option value="Cookie Monster Voice">Cookie Monster Voice</option>
+              <option value="Mickey Voice">Disney Animation Voice Mickey Voice</option>
+              <option value="Judy Voice">Fox Zootopia Voice</option>
+              <option value="Flash Zootopia Voice">Flash Zootopia Voice</option>
+              <option value="Woody Voice">Woody Voice</option>
+              <option value="Buzz Lightyear Voice">Buzz Lightyear Voice</option>
+              <option value="Jessie Voice">Jessie Voice</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" onclick="playTTS()">Speak</button>
+            <button type="button" class="small-btn" onclick="stopTTS()">Stop</button>
+          </div>
+          <div style="margin-top:14px;">
+            <textarea id="ttsText">Hello! Welcome to LogoRemakeFour and the HTML Collections demo.</textarea>
+          </div>
+        </div>
+        <div>
+          <div class="status">✅ Supported Browsers</div>
+          <div class="quick-icons">
+            <span class="pill">Chrome</span>
+            <span class="pill">Firefox</span>
+            <span class="pill">Safari</span>
+            <span class="pill">Gameloft Browser</span>
+            <span class="pill">Facebook Browser</span>
+            <span class="pill">TikTok Browser</span>
+            <span class="pill">Yandex Browser</span>
+            <span class="pill">None brand voices</span>
+          </div>
+          <p style="color:var(--muted); line-height:1.6;">
+            Default implementation uses Responsive Voice when available. The script is loaded from the official Responsive Voice service and respects selected language and voice.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Search</h2>
+      <div class="search-box">
+        <input id="searchInput" type="text" value="red style pictograms" />
+        <button type="button" onclick="runSearch()">Search</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" type="button" data-engine="Google">Google</button>
+        <button class="tab" type="button" data-engine="Bing">Bing</button>
+        <button class="tab" type="button" data-engine="DuckDuckGo">DuckDuckGo</button>
+        <button class="tab" type="button" data-engine="Yandex">Yandex</button>
+      </div>
+      <div class="tabs" style="margin-top:0;">
+        <button class="tab" type="button">Videos</button>
+        <button class="tab" type="button">Images</button>
+        <button class="tab" type="button">Web</button>
+        <button class="tab" type="button">News</button>
+        <button class="tab" type="button">TV</button>
+        <button class="tab" type="button">Maps</button>
+        <button class="tab active" type="button">Images with color red</button>
+      </div>
+      <div class="results" id="searchResults">
+        <div class="result">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Pictogram red">
+          <div class="meta">Google • red style pictogram</div>
+        </div>
+        <div class="result">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="search result">
+          <div class="meta">LogoRemakeFourWTL</div>
+        </div>
+        <div class="result">
+          <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=800&q=80" alt="search result">
+          <div class="meta">RTOT • character concept</div>
+        </div>
+        <div class="result">
+          <img src="https://api.arasaac.org/api/pictograms/5441" alt="OpenSymbols pictogram">
+          <div class="meta">OpenSymbols • pictogram</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Profile</h2>
+      <div class="profile-panel">
+        <div class="profile-card">
+          <div class="hero"></div>
+          <div class="avatar" id="profileAvatar">P</div>
+          <div class="profile-body">
+            <h3 id="profileName">Profile Name</h3>
+            <div class="tiny" id="profileMeta">First Name • Last Name</div>
+            <div class="profile-actions">
+              <button type="button" onclick="window.location.href='https://logoremakefour1530.github.io/htmlcollections?profile=edit&utm_source=logoremakefour'">Edit Profile</button>
+              <button type="button" class="small-btn" onclick="window.location.href='https://logoremakefour1530.github.io/htmlcollections?profile='">View Profile</button>
+            </div>
+          </div>
+        </div>
+
+        <form id="profileForm">
+          <div class="form-group">
+            <label>Profile Picture / Photo</label>
+            <input type="url" id="profilePhoto" value="https://api.arasaac.org/api/pictograms/5441" />
+          </div>
+          <div class="two-col">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="firstName" value="LogoRemakeFour" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="lastName" value="WTL" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Profile Text</label>
+            <textarea id="profileBio">Login 🪙 20 and computer PC. Earn cash, coins and gems. Child lock enabled on Ctrl + K for 2 seconds.</textarea>
+          </div>
+          <button type="button" id="saveProfileBtn">Save Profile</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Child Lock</h2>
+      <div class="status">🔒 Child Lock: press Ctrl + K for 2 seconds to lock</div>
+      <div class="status" style="background:rgba(59,130,246,.12); color:#bfdbfe; border-color:rgba(59,130,246,.25);">🔓 Press Ctrl + K again for 2 seconds to switch between Child / Adult mode</div>
+      <p style="color:var(--muted); margin-top:12px;">
+        A demo lock is implemented in JavaScript. Use keyboard shortcut to toggle the child-safe mode.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Earn & Store</h2>
+      <div class="rewards">
+        <div class="reward">
+          <div class="emoji">🪙</div>
+          <strong>Coins</strong>
+          <div class="tiny">Earn coins by completing tasks and watching media.</div>
+        </div>
+        <div class="reward">
+          <div class="emoji">💎</div>
+          <strong>Gems</strong>
+          <div class="tiny">Trade gems for premium items and unlimited access.</div>
+        </div>
+        <div class="reward">
+          <div class="emoji">💵</div>
+          <strong>Cash</strong>
+          <div class="tiny">Cash rewards and store balance can be tracked per profile.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Media Player & DPlayer</h2>
+      <div class="media-stage">
+        <div id="dplayer"></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+        <button type="button" onclick="playDPlayer()">Play Video</button>
+        <button type="button" class="small-btn" onclick="toggleCast()">Cast to Chromecast / AirPlay</button>
+      </div>
+      <div class="tiny" style="padding-top:12px;">
+        Video URL: https://logoremakefour1530.github.io/km_Template%20260917_720p_60f_20260917_182813.mp4<br>
+        Audio URL: https://logoremakefour1530.github.io/sound-effects/output/game/coin.wav<br>
+        DPlayer image URL: https://api.arasaac.org/api/pictograms/5441
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>OpenSymbols Search Pictograms</h2>
+      <div class="search-box">
+        <input id="pictogramInput" type="text" value="SOON arrow Twitter. Inc." />
+        <button type="button" onclick="searchPictograms()">Search</button>
+      </div>
+      <div class="results" id="pictogramResults">
+        <div class="result">
+          <img src="https://api.arasaac.org/api/pictograms/5441" alt="Pictogram 5441">
+          <div class="meta">SOON arrow</div>
+        </div>
+        <div class="result">
+          <img src="https://api.arasaac.org/api/pictograms/5441" alt="Pictogram 5441 duplicate">
+          <div class="meta">Twitter. Inc.</div>
+        </div>
+        <div class="result">
+          <img src="https://api.arasaac.org/api/pictograms/5441" alt="Pictogram 5441 duplicate">
+          <div class="meta">OpenSymbols Search</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Recorder & Camera</h2>
+      <div class="two-col">
+        <div>
+          <div class="status">🎙️ Audio Recorder</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+            <button type="button" id="startAudioBtn">Start Recording</button>
+            <button type="button" class="small-btn" id="stopAudioBtn">Stop</button>
+            <a id="downloadAudioBtn" class="small-btn" href="#" download="recording.mp3" style="display:inline-block; text-align:center; padding-top:10px;">Download MP3</a>
+          </div>
+          <audio id="audioPlayback" controls style="margin-top:12px; width:100%;"></audio>
+        </div>
+
+        <div>
+          <div class="status">📹 Camera with Microphone</div>
+          <video id="cameraPreview" autoplay muted playsinline style="width:100%; min-height:240px; border-radius:14px; border:1px solid rgba(148,163,184,.14); background:#000; margin-top:12px;"></video>
+          <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+            <button type="button" id="startCameraBtn">Open Camera</button>
+            <button type="button" class="small-btn" id="capturePhotoBtn">Capture Photo</button>
+            <button type="button" class="small-btn" id="recordVideoBtn">Record Video</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>AdSense & Publisher Script Demo</h2>
+      <div class="ad-box">
+        <strong>Google AdSense Country Publisher:</strong> ca-pub-5439326873004541<br>
+        <strong>network-code:</strong> 5441<br>
+        <strong>DoubleClick / GPT tag:</strong> https://securepubads.g.doubleclick.net/tag/js/gpt.js?network-code=5441<br>
+        <strong>AMAZON Ads:</strong> https://c.amazon-adsystem.com/aax2/apstag.js<br>
+        <strong>DPlayer:</strong> https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js
+      </div>
+      <div clareview.play();
+    }
+
+    function capturePhoto() {
+      const canvas = document.createElement('canvas');
+      canvas.width = preview.videoWidth || 640;
+      canvas.height = preview.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(preview, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/png');
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.style.width = '100%';
+      img.style.borderRadius = '14px';
+      img.style.marginTop = '10px';
+      preview.parentNode.appendChild(img);
+    }
+
+    function startVideoRecording() {
+      if (!cameraStream) {
+        startCamera().then(() => {
+          startVideoRecording();
+        });
+        return;
+      }
+      recordedVideoChunks = [];
+      recorderVideo = new MediaRecorder(cameraStream);
+      recorderVideo.ondataavailable = (event) => {
+        if (event.data.size > 0) recordedVideoChunks.push(event.data);
+      };
+      recorderVideo.onstop = () => {
+        const blob = new Blob(recordedVideoChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const video = document.createElement('video');
+        video.src = url;
+        video.controls = true;
+        video.style.width = '100%';
+        video.style.marginTop = '10px';
+        video.style.borderRadius = '14px';
+        preview.parentNode.appendChild(video);
+      };
+      recorderVideo.start();
+      setTimeout(() => {
+        if (recorderVideo && recorderVideo.state !== 'inactive') {
+          recorderVideo.stop();
+          alert('Video recording stopped.');
+        }
+      }, 5000);
+    }
+
+    document.getElementById('startCameraBtn').addEventListener('click', startCamera);
+    document.getElementById('capturePhotoBtn').addEventListener('click', capturePhoto);
+    document.getElementById('recordVideoBtn').addEventListener('click', startVideoRecording);
+
+    // Console log demo
+    console.log('OpenSymbols service: https://logoremakefour1530.github.io/AsTeRICS-Grid/src/js/service/pictograms/openSymbolsService.js');
+    console.log('Logo URL: https://logoremakefour8.github.io/logo.png');
+
+    // Initial profile setup
+    loadProfile();
+
+    // Auto-init DPlayer after DOM load
+    window.addEventListener('load', () => {
+      playDPlayer();
+    });
+  </script>
+</body>
+</html>
