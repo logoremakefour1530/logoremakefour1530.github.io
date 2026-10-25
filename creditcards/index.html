@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Country Credit Cards</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f7fb, #dfe9f5);
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1d3557;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 210px;
+      border-radius: 22px;
+      padding: 22px 22px 18px;
+      color: #fff;
+      overflow: hidden;
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+      pointer-events: none;
+    }
+
+    .us { background: linear-gradient(135deg, #0f172a, #1d4ed8); }
+    .cl { background: linear-gradient(135deg, #0f766e, #14b8a6); }
+    .br { background: linear-gradient(135deg, #2563eb, #0ea5e9); }
+    .ar { background: linear-gradient(135deg, #7c2d12, #f97316); }
+    .es { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 28px;
+    }
+
+    .bank {
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 0.4px;
+    }
+
+    .flag {
+      font-size: 1.9rem;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+    }
+
+    .chip {
+      width: 48px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #fef3c7, #facc15);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 22px;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,0.15);
+    }
+
+    .chip::before,
+    .chip::after {
+      content: "";
+      position: absolute;
+      inset: 8px 10px;
+      border-radius: 6px;
+      border: 2px solid rgba(0,0,0,0.2);
+    }
+
+    .chip::after {
+      inset: 12px 8px;
+      border-left: 2px solid rgba(0,0,0,0.2);
+      border-right: 2px solid rgba(0,0,0,0.2);
+      background: transparent;
+    }
+
+    .card-number {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 1;
+    }
+
+    .label {
+      font-size: 0.7rem;
+      opacity: 0.75;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .value {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .cvv-box {
+      text-align: right;
+    }
+
+    .cvv {
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-weight: bold;
+      display: inline-block;
+      min-width: 62px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .card-number {
+        font-size: 1rem;
+        letter-spacing: 1.4px;
+      }
+
+      .card {
+        min-height: 190px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Country Credit Cards</h1>
+
+    <div class="cards">
+
+      <div class="card us">
+        <div class="card-top">
+          <div class="bank">United States</div>
+          <div class="flag">🇺🇸</div>
+        </div>
+
+        <div class="chip"></div>
+
+        <div class="card-number">2229 3529 3988 6988</div>
+
+        <div class="card-bottom">
+          <div>
+            <div class="label">Card Holder</div>
+            <div class="value">Gary Blamby</div>
+          </div>
+
+          <div>
+            <div class="label">Expiry</div>
+            <div class="value">05/29</div>
+          </div>
+
+          <div class="cvv-box">
+            <div class="label">CVV</div>
+            <div class="cvv">256</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card cl">
+        <div class="card-top">
+          <div class="bank">Scotiabank</div>
+          <div class="flag">🇨🇱</div>
+        </div>
+
+        <div class="chip"></div>
+
+        <div class="card-number">4532 8790 6543 1124</div>
+
+        <div class="card-bottom">
+          <div>
+            <div class="label">Card Holder</div>
+            <div class="value">Juan Pablo</div>
+          </div>
+
+          <div>
+            <div class="label">Expiry</div>
+            <div class="value">08/27</div>
+          </div>
+
+          <div class="cvv-box">
+            <div class="label">CVV</div>
+            <div class="cvv">482</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card br">
+        <div class="card-top">
+          <div class="bank">Brazil</div>
+          <div class="flag">🇧🇷</div>
+        </div>
+
+        <div class="chip"></div>
+
+        <div class="card-number">3782 8224 6310 005</div>
+
+        <div class="card-bottom">
+          <div>
+            <div class="label">Card Holder</div>
+            <div class="value">Arthur Solinap</div>
+          </div>
+
+          <div>
+            <div class="label">Expiry</div>
+            <div class="value">11/28</div>
+          </div>
+
+          <div class="cvv-box">
+            <div class="label">CVV</div>
+            <div class="cvv">604</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card ar">
+        <div class="card-top">
+          <div class="bank">BBVA</div>
+          <div class="flag">🇦🇷</div>
+        </div>
+
+        <div class="chip"></div>
+
+        <div class="card-number">4400 1234 5678 9012</div>
+
+        <div class="card-bottom">
+          <div>
+            <div class="label">Card Holder</div>
+            <div class="value">Carlos Pangasinan</div>
+          </div>
+
+          <div>
+            <div class="label">Expiry</div>
+            <div class="value">03/26</div>
+          </div>
+
+          <div class="cvv-box">
+            <div class="label">CVV</div>
+            <div class="cvv">719</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card es">
+        <div class="card-top">
+          <div class="bank">España</div>
+          <div class="flag">🇪🇸</div>
+        </div>
+
+        <div class="chip"></div>
+
+        <div class="card-number">5204 2040 4000 1000</div>
+
+        <div class="card-bottom">
+          <div>
+            <div class="label">Card Holder</div>
+            <div class="value">Adrián Moreno</div>
+          </div>
+
+          <div>
+            <div class="label">Expiry</div>
+            <div class="value">09/28</div>
+          </div>
+
+          <div class="cvv-box">
+            <div class="label">CVV</div>
+            <div class="cvv">481</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
