@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radio Browser Online / Offline</title>
+  <style>
+    :root {
+      --bg: #101827;
+      --panel: #111827;
+      --card: #1f2937;
+      --primary: #38bdf8;
+      --secondary: #8b5cf6;
+      --online: #22c55e;
+      --offline: #ef4444;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #111827);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 30px 16px;
+    }
+
+    .app {
+      width: min(100%, 980px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      border: 1px solid var(--border);
+    }
+
+    .status::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+    }
+
+    .status.online {
+      color: var(--online);
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    .status.offline {
+      color: var(--offline);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input {
+      flex: 1 1 280px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    .secondary {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .player {
+      background: rgba(17,24,39,0.9);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 8px;
+      filter: saturate(1.2);
+    }
+
+    .stations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .station-card {
+      background: rgba(31,41,55,0.82);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .station-card:hover {
+      border-color: rgba(56, 189, 248, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .station-card img {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    .station-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .station-name {
+      font-weight: 700;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .station-country {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .empty {
+      color: var(--muted);
+      background: rgba(255,255,255,0.02);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <h1>Radio Browser</h1>
+      <div id="status" class="status online">Online</div>
+    </div>
+
+    <div class="toolbar">
+      <input id="searchInput" type="text" value="rock" placeholder="Search radio station..." />
+      <button id="searchBtn">Search</button>
+      <button id="offlineBtn" class="secondary">Offline Stations</button>
+    </div>
+
+    <div class="player">
+      <div id="playingLabel">No station playing</div>
+      <audio id="audio" controls></audio>
+    </div>
+
+    <div id="stations" class="stations"></div>
+  </div>
+
+  <script>
+    const API_BASE = "https://de1.api.radio-browser.info/json/";
+    const OFFLINE_KEY = "radio_browser_offline_cache_v1";
+
+    const statusEl = document.getElementById("status");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const offlineBtn = document.getElementById("offlineBtn");
+    const stationsEl = document.getElementById("stations");
+    const audio = document.getElementById("audio");
+    const playingLabel = document.getElementById("playingLabel");
+
+    function setStatus(online) {
+      statusEl.className = online ? "status online" : "status offline";
+      statusEl.textContent = online ? "Online" : "Offline";
+      console.log("Radio Browser connection:", online ? "online" : "offline");
+    }
+
+    function getOfflineStations() {
+      try {
+        return JSON.parse(localStorage.getItem(OFFLINE_KEY) || "[]");
+      } catch (error) {
+        console.error("Offline cache parse failed:", error);
+        return [];
+      }
+    }
+
+    function saveOfflineStation(station) {
+      const cache = getOfflineStations();
+      const exists = cache.some((item) => item.stationuuid === station.stationuuid);
+
+      if (!exists) {
+        cache.unshift({
+          stationuuid: station.stationuuid,
+          name: station.name,
+          country: station.country || "",
+          favicon: station.favicon || "",
+          url: station.url || "",
+          url_resolved: station.url_resolved || station.url || ""
+        });
+
+        localStorage.setItem(OFFLINE_KEY, JSON.stringify(cache.slice(0, 20)));
+        console.log("Saved offline station:", station.name);
+      }
+    }
+
+    function renderStations(items) {
+      stationsEl.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        stationsEl.innerHTML = '<div class="empty">No stations found.</div>';
+        return;
+      }
+
+      items.forEach((station) => {
+        const card = document.createElement("div");
+        card.className = "station-card";
+        card.innerHTML = `
+          <img src="${station.favicon || 'https://placehold.co/52x52/1f2937/ffffff?text=R'}" alt="${station.name}" />
+          <div class="station-meta">
+            <div class="station-name">${station.name || "Unknown radio"}</div>
+            <div class="station-country">${station.country || "Unknown country"}</div>
+          </div>
+        `;
+        card.addEventListener("click", () => playStation(station));
+        stationsEl.appendChild(card);
+      });
+    }
+
+    function renderOfflineStations() {
+      const cache = getOfflineStations();
+
+      if (!cache.length) {
+        stationsEl.innerHTML = '<div class="empty">No offline stations saved yet.</div>';
+        return;
+      }
+
+      renderStations(cache);
+      console.log("Showing offline radio cache:", cache.length);
+    }
+
+    async function resolveStreamUrl(station) {
+      // Matches the idea used in webradioService.js:
+      // if a station has a resolved url, use it; otherwise fetch by UUID
+      if (station.url_resolved) return station.url_resolved;
+      if (station.url) return station.url;
+
+      try {
+        const response = await fetch(`${API_BASE}url/${station.stationuuid}`);
+        if (!response.ok) throw new Error("URL conversion failed");
+        const data = await response.json();
+        return data.url_resolved || data.url || "";
+      } catch (error) {
+        console.error("Could not resolve stream URL for:", station.name, error);
+        return "";
+      }
+    }
+
+    async function playStation(station) {
+      if (!station) return;
+
+      try {
+        const streamUrl = await resolveStreamUrl(station);
+
+        if (!streamUrl) {
+          alert("This station has no stream URL available.");
+          return;
+        }
+
+        audio.src = streamUrl;
+        await audio.play();
+        playingLabel.textContent = `Playing: ${station.name}`;
+
+        // Keep a local offline cache for later
+        saveOfflineStation(station);
+
+        console.log("Now playing station:", station.name, streamUrl);
+      } catch (error) {
+        console.error("Playback failed:", error);
+        playingLabel.textContent = "Playback failed";
+      }
+    }
+
+    async function searchStations() {
+      const query = searchInput.value.trim() || "rock";
+
+      if (!navigator.onLine) {
+        renderOfflineStations();
+        console.log("Offline mode: showing cached stations instead of live search.");
+        return;
+      }
+
+      console.log("Searching Radio Browser for:", query);
+
+      try {
+        const response = await fetch(
+          `${API_BASE}stations/search?name=${encodeURIComponent(query)}&limit=10&hidebroken=true&order=votes`
+        );
+
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Radio Browser results:", data);
+
+        renderStations(data);
+      } catch (error) {
+        console.error("Radio Browser request failed:", error);
+        renderOfflineStations();
+      }
+    }
+
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") searchStations();
+    });
+
+    searchBtn.addEventListener("click", searchStations);
+    offlineBtn.addEventListener("click", renderOfflineStations);
+
+    window.addEventListener("online", () => {
+      setStatus(true);
+      searchStations();
+    });
+
+    window.addEventListener("offline", () => {
+      setStatus(false);
+      renderOfflineStations();
+    });
+
+    setStatus(navigator.onLine);
+    searchStations();
+  </script>
+</body>
+</html>
