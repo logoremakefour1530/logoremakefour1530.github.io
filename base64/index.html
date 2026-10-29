@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sample Download Base64</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --border: rgba(148, 163, 184, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, var(--bg), #111827, #0b1120);
+      color: var(--text);
+      padding: 32px 18px 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 28px;
+      font-size: 0.96rem;
+    }
+
+    .group {
+      margin-bottom: 28px;
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .group h2 {
+      margin: 0;
+      padding: 14px 18px;
+      background: rgba(56, 189, 248, 0.08);
+      border-bottom: 1px solid var(--border);
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #0f172a, #111827);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      font-size: 0.96rem;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      text-align: center;
+      user-select: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(34, 197, 94, 0.7);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    @media (max-width: 560px) {
+      h1 { font-size: 1.5rem; }
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sample Download Base64</h1>
+    <div class="subtitle">Demo file downloads generated from Base64 data URLs</div>
+
+    <div id="app"></div>
+  </div>
+
+  <script>
+    const groups = [
+      {
+        title: "Video",
+        files: [
+          { name: "sample.mp4", mime: "video/mp4", text: "Sample MP4 file for download testing." },
+          { name: "sample.wmv", mime: "video/x-ms-wmv", text: "Sample WMV file for download testing." },
+          { name: "sample.avi", mime: "video/x-msvideo", text: "Sample AVI"](#)*{ name: "sample.mov", mime: "video/quicktime", text: "Sample MOV file for download testing." },
+          { name: "sample.webm", mime: "video/webm", text: "Sample WEBM file for download testing." }
+        ]
+      },
+      {
+        title: "Audio",
+        files: [
+          { name: "sample.mp3", mime: "audio/mpeg", text: "Sample MP3 audio file for download testing." },
+          { name: "sample.wma", mime: "audio/x-ms-wma", text: "Sample WMA audio file for download testing." },
+          { name: "sample.wav", mime: "audio/wav", text: "Sample WAV audio file for download testing." },
+          { name: "sample.ogg", mime: "audio/ogg", text: "Sample OGG audio file for download testing." }
+        ]
+      },
+      {
+        title: "Image",
+        files: [
+          { name: "sample.png", mime: "image/png", text: "Sample PNG image file for download testing." },
+          { name: "sample.jpg", mime: "image/jpeg", text: "Sample JPG image file for download testing." },
+          { name: "sample.jpeg", mime: "image/jpeg", text: "Sample JPEG image file for download testing." },
+          { name: "sample.heic", mime: "image/heic", text: "Sample HEIC image file for download testing." },
+          { name: "sample.tiff", mime: "image/tiff", text: "Sample TIFF image file for download testing." }
+        ]
+      },
+      {
+        title: "App & Projects",
+        files: [
+          { name: "sample.apk", mime: "application/vnd.android.package-archive", text: "Sample APK package file for download testing." },
+          { name: "sample.exe", mime: "application/vnd.microsoft.portable-executable", text: "Sample EXE application file for download testing." },
+          { name: "sample.ipa", mime: "application/octet-stream", text: "Sample IPA package file for download testing." },
+          { name: "sample.dmg", mime: "application/octet-stream", text: "Sample DMG application file for download testing." },
+          { name: "sample.kine", mime: "application/octet-stream", text: "Sample KineMaster project file for download testing." }
+        ]
+      },
+      {
+        title: "Music / Pixabay",
+        files: [
+          { name: "pixabay-sample.mp3", mime: "audio/mpeg", text: "Sample Pixabay-style music file for download testing." }
+        ]
+      },
+      {
+        title: "Website, Documents & Stylesheets",
+        files: [
+          { name: "sample.html", mime: "text/html", text: "<!DOCTYPE html><html><body><h1>Sample HTML</h1><p>This is a sample HTML file.</p></body></html>" },
+          { name: "sample.js", mime: "application/javascript", text: "console.log('Sample JavaScript file');" },
+          { name: "sample.css", mime: "text/css", text: "body { font-family: Arial, sans-serif; color: #333; }" },
+          { name: "sample.rb", mime: "application/x-ruby", text: "puts 'Sample Ruby file'" },
+          { name: "sample.htm", mime: "text/html", text: "<html><body><h2>Sample HTM</h2></body></html>" },
+          { name: "sample.txt", mime: "text/plain", text: "Sample text file content.\nThis is for download testing." },
+          { name: "sample.pptx", mime: "application/vnd.openxmlformats-officedocument.presentationml.presentation", text: "Sample PPTX file placeholder." },
+          { name: "sample.docx", mime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", text: "Sample DOCX file placeholder." },
+          { name: "sample.xlsx", mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", text: "Sample XLSX file placeholder." },
+          { name: "sample.php", mime: "application/x-php", text: "<?php echo 'Sample PHP file'; ?>" }
+        ]
+      },
+      {
+        title: "Emulators",
+        files: [
+          { name: "sample.wad", mime: "application/octet-stream", text: "Sample Wii game WAD file for download testing." },
+          { name: "sample.iso", mime: "application/x-iso9660-image", text: "Sample ISO image file for download testing." },
+          { name: "sample.n64", mime: "application/octet-stream", text: "Sample N64 ROM file for download testing." },
+          { name: "sample.nes", mime: "application/octet-stream", text: "Sample NES ROM file for download testing." },
+          { name: "sample.mame", mime: "application/octet-stream", text: "Sample MAME ROM file for download testing." }
+        ]
+      },
+      {
+        title: "Archive & Documents",
+        files: [
+          { name: "sample.pdf", mime: "application/pdf", text: "This is a sample PDF placeholder for testing download generation." },
+          { name: "sample.zip", mime: "application/zip", text: "Sample ZIP archive with text file content." },
+          { name: "sample.rar", mime: "application/x-rar-compressed", text: "Sample RAR archive with text file content." },
+          { name: "sample.jar", mime: "application/java-archive", text: "Sample JAR archive for download testing." }
+        ]
+      },
+      {
+        title: "Minecraft",
+        files: [
+          { name: "sample.mcaddon", mime: "application/octet-stream", text: "Sample MCADDON file for download testing." },
+          { name: "sample.mcworld", mime: "application/octet-stream", text: "Sample MCWORLD file for download testing." }
+        ]
+      }
+    ];
+
+    function toBase64(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function dataUrlFromText(mime, text) {
+      return "data:" + mime + ";base64," + toBase64(text);
+    }
+
+    function addButtons() {
+      const app = document.getElementById("app");
+
+      groups.forEach(group => {
+        const section = document.createElement("section");
+        section.className = "group";
+
+        const title = document.createElement("h2");
+        title.textContent = group.title;
+        section.appendChild(title);
+
+        const grid = document.createElement("div");
+        grid.className = "grid";
+
+        group.files.forEach(file => {
+          const btn = document.createElement("button");
+          btn.className = "btn";
+          btn.type = "button";
+          btn.textContent = file.name;
+          btn.addEventListener("click", () => {
+            const a = document.createElement("a");
+            a.href = dataUrlFromText(file.mime, file.text);
+            a.download = file.name;
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          });
+          grid.appendChild(btn);
+        });
+
+        section.appendChild(grid);
+        app.appendChild(section);
+      });
+    }
+
+    addButtons();
+  </script>
+</body>
+</html>
