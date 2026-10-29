@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GarageBand Download</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: #f9fafb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      background: #1f2937;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .download-btn {
+      display: block;
+      width: 260px;
+      margin: 14px auto;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      transition: transform 0.2s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GarageBand Downloads</h1>
+
+    <button class="download-btn" id="pianoBtn">Download Piano GarageBand</button>
+    <button class="download-btn" id="guitarBtn">Download Guitar GarageBand</button>
+    <button class="download-btn" id="voiceBtn">Download Voice Recorder GarageBand</button>
+  </div>
+
+  <script>
+    // Convert a normal text string into Base64
+    function toBase64(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function downloadBase64File(fileName, base64Data, mimeType = "application/octet-stream") {
+      const binary = atob(base64Data);
+      const byteArray = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+      const blob = new Blob([byteArray], { type: mimeType });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }
+
+    // Replace these strings with actual Base64 content if you have real GarageBand project files.
+    const pianoData = toBase64("GarageBand Piano Project");
+    const guitarData = toBase64("GarageBand Guitar Project");
+    const voiceData = toBase64("GarageBand Voice Recorder Project");
+
+    document.getElementById("pianoBtn").addEventListener("click", () => {
+      downloadBase64File("Piano.garageband", pianoData, "application/octet-stream");
+    });
+
+    document.getElementById("guitarBtn").addEventListener("click", () => {
+      downloadBase64File("Guitar.garageband", guitarData, "application/octet-stream");
+    });
+
+    document.getElementById("voiceBtn").addEventListener("click", () => {
+      downloadBase64File("VoiceRecorder.garageband", voiceData, "application/octet-stream");
+    });
+  </script>
+</body>
+</html>
